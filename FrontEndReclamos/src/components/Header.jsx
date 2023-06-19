@@ -1,4 +1,4 @@
-import logo from "../../img/shohin.svg";
+import logo from "../img/shohin.svg";
 
 const Header = () => {
   return (

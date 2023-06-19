@@ -1,9 +1,9 @@
 import { useState } from "react";
 import "./App.css";
-import IngresoReclamo from "./assets/pages/IngresoReclamo";
-import Header from "./assets/components/Header";
+import IngresoReclamo from "./pages/IngresoReclamo";
+import Header from "./components/Header";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import ListarReclamos from "./assets/pages/ListarReclamos";
+import ListarReclamos from "./pages/ListarReclamos";
 function App() {
   const [count, setCount] = useState(0);
 
@@ -13,7 +13,7 @@ function App() {
         <Header />
         <BrowserRouter>
           <Routes>
-            <Route path="/ingreso-reclamo" element={<IngresoReclamo />} />
+            <Route index path="/ingreso-reclamo" element={<IngresoReclamo />} />
             <Route path="/listar-reclamos" element={<ListarReclamos />} />
           </Routes>
         </BrowserRouter>

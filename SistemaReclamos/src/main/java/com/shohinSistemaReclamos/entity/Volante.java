@@ -2,23 +2,34 @@ package com.shohinSistemaReclamos.entity;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
+
 @Entity
-public class Reclamo {
+@Table(name = "volantes")
+public class Volante implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String medio;
-    @Column(name="linea_aerea")
     private String lineaAerea;
-    @Column(name="estado_carga")
     private String estadoCarga;
-
     private String dni;
     private String ruc;
-    @Column(name="numero_volante")
+    @Column(name = "numero_volante")
     private String numeroVolante;
 
-    public Reclamo() {
+    public Volante() {
+    }
+
+    public Volante(Long id, String medio, String lineaAerea, String estadoCarga, String dni, String ruc, String numeroVolante) {
+        this.id = id;
+        this.medio = medio;
+        this.lineaAerea = lineaAerea;
+        this.estadoCarga = estadoCarga;
+        this.dni = dni;
+        this.ruc = ruc;
+        this.numeroVolante = numeroVolante;
     }
 
     public Long getId() {
