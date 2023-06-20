@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const IngresoReclamo = () => {
   const [formData, setFormData] = useState({
@@ -16,6 +18,7 @@ const IngresoReclamo = () => {
     estadoCarga: "",
     dni: "",
     ruc: "",
+    fechaEnvio: "",
   });
 
   const handleInputChange = (event) => {
@@ -32,15 +35,21 @@ const IngresoReclamo = () => {
       fetchData();
     }
   };
-
+  const handleDateChange = (date) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      fechaRecepcion: date,
+    }));
+  };
   const fetchData = () => {
     axios
       .post("http://localhost:8080/api/datos", {
         numeroVolante: formData.numeroVolante,
       })
       .then((response) => {
+        console.log(response.data[0]);
         const { numeroVolante, medio, lineaAerea, estadoCarga, dni, ruc } =
-          response.data;
+          response.data[0];
         setFormData((prevFormData) => ({
           ...prevFormData,
           numeroVolante,
@@ -57,10 +66,25 @@ const IngresoReclamo = () => {
   };
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+    const updatedFormData = {
+      ...formData,
+      fechaEnvio: new Date(),
+    };
+    console.log(updatedFormData);
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/api/reclamos",
+        updatedFormData
+      );
+      console.log(response);
+      navigate("/listar-reclamos");
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
+
   return (
     <div className="max-w-full mx-auto p-4 h-full">
       <div className="flex justify-center h-full">
@@ -140,12 +164,23 @@ const IngresoReclamo = () => {
               <label className="text-left mb-2 text-gray-500 font-bold text-base">
                 Fecha de Recepción
               </label>
-              <input
+              {/* <input
                 name="fechaRecepcion"
                 type="date"
                 className="w-full px-3 py-2 mb-2 transition-all border border-gray-200 rounded-md outline-blue-600/50 hover:border-blue-600/30 text-gray-500 cursor-pointer"
                 value={formData.fechaRecepcion}
                 onChange={handleInputChange}
+              /> */}
+              <DatePicker
+                name="fechaRecepcion"
+                selected={formData.fechaRecepcion}
+                onChange={handleDateChange}
+                showTimeSelect
+                timeFormat="HH:mm"
+                timeIntervals={15}
+                dateFormat="yyyy-MM-dd HH:mm"
+                placeholderText="Seleccione fecha y hora"
+                className="w-full bg-white border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
             <div className="flex flex-col">

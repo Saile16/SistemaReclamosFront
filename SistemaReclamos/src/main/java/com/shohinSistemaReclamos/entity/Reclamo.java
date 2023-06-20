@@ -11,33 +11,65 @@ public class Reclamo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String codigo;
-    @Column(name = "tipo_reclamo")
-    private String tipoReclamo;
-
-    @Column(name = "persona_reclamo")
-    private String personaReclamo;
-
-    private String nombre;
-    @Column(name = "fecha_recepcion")
-    private Date fechaRecepcion;
-
-    @Column(name = "monto_reclamo")
-    private String montoReclamo;
-
     @Column(name = "descripcion")
     private String descripcion;
-    private String medio;
-    @Column(name="linea_aerea")
-    private String lineaAerea;
+    private String dni;
     @Column(name="estado_carga")
     private String estadoCarga;
 
-    private String dni;
-    private String ruc;
+
+    @Column(name = "fecha_recepcion")
+    private Date fechaRecepcion;
+    @Column(name="linea_aerea")
+    private String lineaAerea;
+    private String medio;
+    @Column(name = "monto_reclamo")
+    private String montoReclamo;
+    private String nombre;
     @Column(name="numero_volante")
     private String numeroVolante;
+    @Column(name = "persona_reclamo")
+    private String personaReclamo;
+    private String ruc;
+    @Column(name = "tipo_reclamo")
+    private String tipoReclamo;
+    private String observaciones;
+    @Column(name = "fecha_envio")
+    private Date fechaEnvio;
 
+    @Column(name = "fecha_resp_seguridad")
+    private Date fechaRespSeguridad;
+
+    @Column(name = "fecha_resp_operaciones")
+    private Date fechaRespOperaciones;
     public Reclamo() {
+    }
+
+    public Reclamo(String codigo, String observaciones) {
+        this.codigo = codigo;
+        this.observaciones = observaciones;
+    }
+
+    public Reclamo(Long id, String codigo, String descripcion, String dni, String estadoCarga, Date fechaRecepcion, String lineaAerea, String medio, String montoReclamo, String nombre,
+                   String numeroVolante, String personaReclamo, String ruc, String tipoReclamo, String observaciones,Date fechaEnvio,Date fechaRespSeguridad,Date fechaRespOperaciones) {
+        this.id = id;
+        this.codigo = codigo;
+        this.descripcion = descripcion;
+        this.dni = dni;
+        this.estadoCarga = estadoCarga;
+        this.fechaRecepcion = fechaRecepcion;
+        this.lineaAerea = lineaAerea;
+        this.medio = medio;
+        this.montoReclamo = montoReclamo;
+        this.nombre = nombre;
+        this.numeroVolante = numeroVolante;
+        this.personaReclamo = personaReclamo;
+        this.ruc = ruc;
+        this.tipoReclamo = tipoReclamo;
+        this.observaciones = observaciones;
+        this.fechaEnvio = fechaEnvio;
+        this.fechaRespSeguridad=fechaRespSeguridad;
+        this.fechaRespOperaciones=fechaRespOperaciones;
     }
 
     public Long getId() {
@@ -78,6 +110,14 @@ public class Reclamo {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public Date getFechaEnvio() {
+        return fechaEnvio;
+    }
+
+    public void setFechaEnvio(Date fechaEnvio) {
+        this.fechaEnvio = fechaEnvio;
     }
 
     public Date getFechaRecepcion() {
@@ -150,5 +190,31 @@ public class Reclamo {
 
     public void setNumeroVolante(String numeroVolante) {
         this.numeroVolante = numeroVolante;
+    }
+
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
+    }
+
+    public Date getFechaRespSeguridad() {
+        return fechaRespSeguridad;
+    }
+
+    public Date getFechaRespOperaciones() {
+        return fechaRespOperaciones;
+    }
+
+    public void setFechaRespOperaciones(Date fechaRespOperaciones) {
+        this.fechaRespOperaciones = fechaRespOperaciones;
+    }
+
+    public void setFechaRespSeguridad(Date fechaRespSeguridad) {
+        this.fechaRespSeguridad = fechaRespSeguridad;
+
+
     }
 }

@@ -6,30 +6,33 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "volantes")
-public class Volante implements Serializable {
+public class Volante {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String medio;
-    private String lineaAerea;
-    private String estadoCarga;
     private String dni;
-    private String ruc;
+    private String estadoCarga;
+    private String lineaAerea;
+
+    private String medio;
     @Column(name = "numero_volante")
     private String numeroVolante;
+
+    private String ruc;
+
 
     public Volante() {
     }
 
-    public Volante(Long id, String medio, String lineaAerea, String estadoCarga, String dni, String ruc, String numeroVolante) {
+    public Volante(Long id, String dni, String estadoCarga, String lineaAerea, String medio, String numeroVolante, String ruc) {
         this.id = id;
-        this.medio = medio;
-        this.lineaAerea = lineaAerea;
-        this.estadoCarga = estadoCarga;
         this.dni = dni;
-        this.ruc = ruc;
+        this.estadoCarga = estadoCarga;
+        this.lineaAerea = lineaAerea;
+        this.medio = medio;
         this.numeroVolante = numeroVolante;
+        this.ruc = ruc;
     }
 
     public Long getId() {
