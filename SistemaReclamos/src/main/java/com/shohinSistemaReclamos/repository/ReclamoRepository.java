@@ -81,16 +81,11 @@ public class ReclamoRepository {
         );
         String set="";
         if(reclamo.getObservaciones()!=null){
-            set+= "SET observaciones = '"+reclamo.getObservaciones()+"' ";
+            set+= "SET observaciones = '"+reclamo.getObservaciones()+"', fecha_resp_operaciones = ' "+reclamo.getFechaRespOperaciones()+"'";
         }
 
         if(reclamo.getFechaRespSeguridad()!=null){
             set+= "SET fecha_resp_seguridad = '"+reclamo.getFechaRespSeguridad()+"' ";
-        }
-
-        if(reclamo.getFechaRespOperaciones()!=null){
-            System.out.println(reclamo.getFechaRespOperaciones()+"llama ????");
-            set+= "SET fecha_resp_operaciones = '"+reclamo.getFechaRespOperaciones()+"' ";
         }
         String where = "where numero_volante='" + reclamo.getNumeroVolante()+"'";
         Query query = em.createNativeQuery(sql + set+ where);

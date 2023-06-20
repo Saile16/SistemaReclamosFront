@@ -29,10 +29,16 @@ const FilaTablaReclamo = ({ reclamo }) => {
     }));
   };
   const handleEnviarRespuestaOperaciones = async () => {
+    console.log(reclamoObject);
+    const updatedFormData = {
+      ...reclamoObject,
+      fechaRespOperaciones: new Date(),
+    };
+    console.log(updatedFormData);
     try {
       const response = await axios.put(
         "http://localhost:8080/api/actualizar",
-        reclamoObject
+        updatedFormData
       );
       console.log(response);
     } catch (error) {
