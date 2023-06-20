@@ -4,12 +4,10 @@ import com.shohinSistemaReclamos.entity.Volante;
 import com.shohinSistemaReclamos.repository.ReclamoRepository;
 import com.shohinSistemaReclamos.repository.VolanteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -29,6 +27,12 @@ public class ReclamoController implements Serializable{
         Volante resultado = volanteRepository.findByNumeroVolante(numeroVolante);
         System.out.println(resultado + " que devuelve ");
         return volanteRepository.findByNumeroVolante(numeroVolante);
+    }
+
+    @PostMapping("/grabar")
+    public String grabarReclamo(@RequestBody Map<String, String> request){
+        System.out.println(request);
+        return "hola";
     }
 
 }
