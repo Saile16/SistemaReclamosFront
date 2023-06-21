@@ -68,8 +68,8 @@ public class ReclamoRepository {
 
         return lista.stream()
                 .map(t -> new Reclamo(
-                        (Long) t[0], (String) t[1], (String) t[2], (String) t[3], (String) t[4], (Date) t[5], (String) t[6], (String) t[7], (String) t[8], (String) t[9],
-                        (String) t[10], (String) t[11], (String) t[12], (String) t[13],(String) t[14],(Date) t[15],(Date) t[16],(Date) t[17]
+                        (Long) t[0], (String) t[1], (String) t[2], (String) t[3], (String) t[4], (Date) t[5], (Date) t[6], (Date) t[7], (Date) t[8], (String) t[9], (String) t[10], (String) t[11],
+                        (String) t[12], (String) t[13], (String) t[14], (String) t[15], (String) t[16], (String) t[17]
 
                 ))
                 .collect(Collectors.toList());
