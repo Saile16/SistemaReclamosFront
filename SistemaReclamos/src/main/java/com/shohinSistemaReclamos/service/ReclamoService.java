@@ -13,14 +13,19 @@ public class ReclamoService {
 
     @Autowired
     ReclamoRepository reclamoRepository;
-    private static int codigoContador = 1;
     @Transactional
     public List<?> grabar(Reclamo reclamo){
         List<?> lista=reclamoRepository.listar();
-        System.out.println(lista+"llama a esto ????");
-        for ( Object codigoGenerar : lista) {
-            System.out.println(codigoGenerar.toString());
+        Long contador;
+        if(lista.isEmpty()){
+            String ultimoReclamo = reclamo.getNumeroVolante();
+            contador = 1L;
+            String secuencia = String.format("TRA-%s-%05d", ultimoReclamo, contador);
+            reclamo.setCodigo(secuencia);
         }
+        contador = (long) lista.size();
+        String secuencia = String.format("TRA-%s-%05d", reclamo.getNumeroVolante(), contador+1);
+        reclamo.setCodigo(secuencia);
         List<?> datos=reclamoRepository.grabar(reclamo);
         return datos;
     }
