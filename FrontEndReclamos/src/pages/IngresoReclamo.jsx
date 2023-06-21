@@ -3,8 +3,12 @@ import axios from "axios";
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Spinner from "../components/Spinner";
+import Mensajes from "../components/Mensajes";
 
 const IngresoReclamo = () => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
   const [formData, setFormData] = useState({
     numeroVolante: "",
     tipoReclamo: "",
@@ -41,28 +45,41 @@ const IngresoReclamo = () => {
       fechaRecepcion: date,
     }));
   };
-  const fetchData = () => {
-    axios
-      .post("http://localhost:8080/api/datos", {
+  const fetchData = async () => {
+    setLoading(true);
+    setError(false);
+    try {
+      const response = await axios.post("http://localhost:8080/api/datos", {
         numeroVolante: formData.numeroVolante,
-      })
-      .then((response) => {
-        console.log(response.data[0]);
-        const { numeroVolante, medio, lineaAerea, estadoCarga, dni, ruc } =
-          response.data[0];
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          numeroVolante,
-          medio,
-          lineaAerea,
-          estadoCarga,
-          dni,
-          ruc,
-        }));
-      })
-      .catch((error) => {
-        console.error("Error:", error);
       });
+      console.log(response);
+      const { numeroVolante, medio, lineaAerea, estadoCarga, dni, ruc } =
+        response.data[0];
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        numeroVolante,
+        medio,
+        lineaAerea,
+        estadoCarga,
+        dni,
+        ruc,
+      }));
+      setLoading(false);
+    } catch (error) {
+      console.error("Error:", error);
+      setError(true);
+      setLoading(false);
+      setFormData({
+        medio: "",
+        lineaAerea: "",
+        estadoCarga: "",
+        dni: "",
+        ruc: "",
+      });
+      console.log(error, "llama ? ");
+    } finally {
+      setLoading(false);
+    }
   };
   const navigate = useNavigate();
 
@@ -300,12 +317,14 @@ const IngresoReclamo = () => {
                 type="submit"
                 className="w-1/2 mt-2 p-2.5 text-sm font-medium text-white bg-blue-600 rounded-md text-center"
               >
-                Registrar
+                Registrar Reclamo
               </button>
             </div>
           </form>
         </div>
       </div>
+      {loading && <Spinner />}
+      {error && <Mensajes />}
     </div>
   );
 };

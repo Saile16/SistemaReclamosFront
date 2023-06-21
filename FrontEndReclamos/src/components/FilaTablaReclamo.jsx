@@ -1,18 +1,20 @@
 import { useState } from "react";
 import axios from "axios";
 import { format } from "date-fns";
+import useReclamos from "../hooks/useReclamos";
 const FilaTablaReclamo = ({ reclamo }) => {
   //   console.log(reclamo);
+  const {
+    handleSeguridad,
+    handleEnviarRespuestaOperaciones,
+    loading,
+    error,
+    respondido,
+  } = useReclamos();
   const [observaciones, setObservaciones] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const [reclamoObject, setReclamoObject] = useState({
-    numeroVolante: "",
-    fechaRespOperaciones: "",
-    observaciones: "",
-  });
-  const handleOpenModal = (numeroVolante) => {
-    console.log(numeroVolante);
-    setReclamoObject({ numeroVolante });
+
+  const handleOpenModal = () => {
     setShowModal(true);
   };
 
@@ -23,43 +25,20 @@ const FilaTablaReclamo = ({ reclamo }) => {
       return;
     }
     setShowModal(false);
-    setReclamoObject((prevFormData) => ({
-      ...prevFormData,
-      observaciones,
-    }));
-  };
-  const handleEnviarRespuestaOperaciones = async () => {
-    console.log(reclamoObject);
-    const updatedFormData = {
-      ...reclamoObject,
-      fechaRespOperaciones: new Date(),
-    };
-    console.log(updatedFormData);
-    try {
-      const response = await axios.put(
-        "http://localhost:8080/api/actualizar",
-        updatedFormData
-      );
-      console.log(response);
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-  const handleSeguridad = async (numeroVolante) => {
-    try {
-      const response = await axios.put("http://localhost:8080/api/actualizar", {
-        numeroVolante,
-        fechaRespSeguridad: new Date(),
-      });
-      console.log(response);
-    } catch (error) {
-      console.error("Error:", error);
-    }
   };
 
   return (
     <>
-      <tr key={reclamo.id}>
+      <tr
+        key={reclamo.id}
+        // className={`${
+        //   reclamo.id == "1"
+        //     ? "bg-green-500 text-white"
+        //     : reclamo.id == "2"
+        //     ? "bg-amber-200"
+        //     : "bg-red-300"
+        // }`}
+      >
         <td className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
           {reclamo.codigo}
         </td>
@@ -67,7 +46,9 @@ const FilaTablaReclamo = ({ reclamo }) => {
           {format(new Date(reclamo.fechaRecepcion), "dd/MM/yyyy HH:mm:ss")}
         </td>
         <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
-          {format(new Date(reclamo.fechaEnvio), "dd/MM/yyyy HH:mm:ss")}
+          {reclamo.fechaEnvio != null
+            ? format(new Date(reclamo.fechaEnvio), "dd/MM/yyyy HH:mm:ss")
+            : "-----"}
         </td>
         <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
           {!reclamo.fechaRespSeguridad ? (
@@ -84,23 +65,30 @@ const FilaTablaReclamo = ({ reclamo }) => {
         <td className="px-6 py-4 text-sm font-medium text-center whitespace-nowrap flex flex-col items-center justify-center">
           {!reclamo.observaciones ? (
             <button
-              onClick={() => handleOpenModal(reclamo.numeroVolante)}
+              onClick={handleOpenModal}
               // onChange={(e) => setObservaciones(e.target.value)}
               type="button"
               className="ml-2 focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
             >
               Observaciones
             </button>
-          ) : (
+          ) : reclamo.fechaRespOperaciones != null ? (
             format(
               new Date(reclamo.fechaRespOperaciones),
               "dd/MM/yyyy HH:mm:ss"
             )
+          ) : (
+            "No envió respuesta"
           )}
           {observaciones ? (
             <button
               className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-              onClick={handleEnviarRespuestaOperaciones}
+              onClick={() =>
+                handleEnviarRespuestaOperaciones(
+                  reclamo.numeroVolante,
+                  observaciones
+                )
+              }
             >
               Enviar
             </button>

@@ -1,8 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import FilaTablaReclamo from "./FilaTablaReclamo";
+import ReclamosContext from "../context/ReclamosProvider";
+import useReclamos from "../hooks/useReclamos";
+import Spinner from "./Spinner";
 
-const TablaReclamos = ({ reclamosLista }) => {
-  console.log(reclamosLista);
+const TablaReclamos = () => {
+  const { listarReclamos, reclamos, loading, error } = useReclamos();
+  useEffect(() => {
+    listarReclamos();
+  }, []);
+
+  if (loading) return <Spinner />;
   return (
     <>
       <table className="min-w-full divide-y divide-gray-200">
@@ -65,7 +73,7 @@ const TablaReclamos = ({ reclamosLista }) => {
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200">
-          {reclamosLista.map((reclamo) => (
+          {reclamos.map((reclamo) => (
             <FilaTablaReclamo reclamo={reclamo} key={reclamo.id} />
           ))}
         </tbody>

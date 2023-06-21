@@ -16,9 +16,11 @@ public class ReclamoService {
     private static int codigoContador = 1;
     @Transactional
     public List<?> grabar(Reclamo reclamo){
-        String codigo = "TRA-" + String.format("%06d", codigoContador);
-        codigoContador++;
-        reclamo.setCodigo(codigo);
+        List<?> lista=reclamoRepository.listar();
+        System.out.println(lista+"llama a esto ????");
+        for ( Object codigoGenerar : lista) {
+            System.out.println(codigoGenerar.toString());
+        }
         List<?> datos=reclamoRepository.grabar(reclamo);
         return datos;
     }
@@ -34,4 +36,10 @@ public class ReclamoService {
         List<?> lista=reclamoRepository.actualizar(reclamo);
         return lista;
     }
+
+    public void generarCodigo(){
+
+    }
+
+
 }
