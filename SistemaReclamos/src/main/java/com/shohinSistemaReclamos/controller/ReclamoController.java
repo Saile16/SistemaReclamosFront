@@ -1,8 +1,7 @@
 package com.shohinSistemaReclamos.controller;
 
-import com.shohinSistemaReclamos.entity.Reclamo;
-import com.shohinSistemaReclamos.entity.Volante;
-import com.shohinSistemaReclamos.repository.ReclamoRepository;
+import com.shohinSistemaReclamos.entity.primary.Reclamo;
+import com.shohinSistemaReclamos.entity.second.Volante;
 import com.shohinSistemaReclamos.service.ReclamoService;
 import com.shohinSistemaReclamos.service.VolanteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +31,7 @@ public class ReclamoController {
     ){
         Map<String,Object> response = new HashMap<>();
         try{
+            System.out.println("llama esto " + volante);
             List<Volante> listaDocumento=volanteService.datosVolante(volante);
             if(listaDocumento.isEmpty()){
                 response.put("Mensaje","No existen datos en esa fecha");

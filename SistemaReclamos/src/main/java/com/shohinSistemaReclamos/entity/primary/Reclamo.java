@@ -1,4 +1,4 @@
-package com.shohinSistemaReclamos.entity;
+package com.shohinSistemaReclamos.entity.primary;
 
 import jakarta.persistence.*;
 

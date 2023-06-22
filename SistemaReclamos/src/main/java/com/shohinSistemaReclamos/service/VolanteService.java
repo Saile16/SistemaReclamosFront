@@ -1,7 +1,7 @@
 package com.shohinSistemaReclamos.service;
 
-import com.shohinSistemaReclamos.entity.Volante;
-import com.shohinSistemaReclamos.repository.VolanteRepository;
+import com.shohinSistemaReclamos.entity.second.Volante;
+import com.shohinSistemaReclamos.repository.second.VolanteRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

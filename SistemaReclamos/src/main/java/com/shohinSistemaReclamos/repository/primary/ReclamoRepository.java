@@ -1,7 +1,6 @@
-package com.shohinSistemaReclamos.repository;
+package com.shohinSistemaReclamos.repository.primary;
 
-import com.shohinSistemaReclamos.entity.Reclamo;
-import com.shohinSistemaReclamos.entity.Volante;
+import com.shohinSistemaReclamos.entity.primary.Reclamo;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;

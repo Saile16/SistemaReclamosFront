@@ -10,6 +10,7 @@ const IngresoReclamo = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [formData, setFormData] = useState({
+    almacen: "dt",
     numeroVolante: "",
     tipoReclamo: "",
     personaReclamo: "",
@@ -20,9 +21,14 @@ const IngresoReclamo = () => {
     medio: "",
     lineaAerea: "",
     estadoCarga: "",
-    dni: "",
-    ruc: "",
-    fechaEnvio: "",
+    nombreConsignatario: "",
+    agenteCarga: "",
+    agenteAduana: "",
+    guiaMaster: "",
+    guiaHija: "",
+    tipoIngreso: "",
+    fechaVuelo: "",
+    numeroVuelo: "",
   });
 
   const handleInputChange = (event) => {
@@ -45,37 +51,66 @@ const IngresoReclamo = () => {
       fechaRecepcion: date,
     }));
   };
+
   const fetchData = async () => {
     setLoading(true);
     setError(false);
     try {
       const response = await axios.post("http://localhost:8080/api/datos", {
+        almacen: formData.almacen,
         numeroVolante: formData.numeroVolante,
       });
-      console.log(response);
-      const { numeroVolante, medio, lineaAerea, estadoCarga, dni, ruc } =
-        response.data[0];
+      console.log({
+        almacen: formData.almacen,
+        numeroVolante: formData.numeroVolante,
+      });
+      console.log(response.data[0]);
+      const {
+        numeroVolante,
+        lineaAerea,
+        estadoCarga,
+        nombreConsignatario,
+        agenteCarga,
+        agenteAduana,
+        guiaMaster,
+        guiaHija,
+        tipoIngreso,
+        fechaVuelo,
+        numeroVuelo,
+      } = response.data[0];
       setFormData((prevFormData) => ({
         ...prevFormData,
         numeroVolante,
-        medio,
         lineaAerea,
         estadoCarga,
-        dni,
-        ruc,
+        nombreConsignatario,
+        agenteCarga,
+        agenteAduana,
+        guiaMaster,
+        guiaHija,
+        tipoIngreso,
+        fechaVuelo,
+        numeroVuelo,
       }));
       setLoading(false);
     } catch (error) {
       console.error("Error:", error);
       setError(true);
       setLoading(false);
-      setFormData({
+      setFormData((prevFormData) => ({
+        ...prevFormData,
         medio: "",
         lineaAerea: "",
         estadoCarga: "",
-        dni: "",
-        ruc: "",
-      });
+        nombreConsignatario: "",
+        agenteCarga: "",
+        agenteAduana: "",
+        guiaMaster: "",
+        guiaHija: "",
+        tipoIngreso: "",
+        fechaVuelo: "",
+        numeroVuelo: "",
+      }));
       console.log(error, "llama ? ");
     } finally {
       setLoading(false);
@@ -110,6 +145,23 @@ const IngresoReclamo = () => {
             Registro reclamo
           </h1>
           <form className="grid grid-cols-2 gap-4 p-5" onSubmit={handleSubmit}>
+            <div className="flex flex-col">
+              <label className="text-left mb-2 text-gray-500 font-bold text-base">
+                Almacen
+              </label>
+              <div className="relative flex items-center mb-2 w-2/3 after:absolute after:right-3 after:border-black/70 after:border-b after:border-r after:transform after:rotate-45 after:h-[8px] after:w-[8px]">
+                <select
+                  name="almacen"
+                  required
+                  className="w-full px-3 py-2 text-black transition-all border border-gray-200 rounded-md outline-blue-600/50 appearance-none bg-white cursor-pointer hover:border-blue-600/30 invalid:text-gray-400"
+                  onChange={handleInputChange}
+                  value={formData.almacen}
+                >
+                  <option value="dt">DT</option>
+                  <option value="DTEER">DTEER</option>
+                </select>
+              </div>
+            </div>
             <div className="flex flex-col">
               <label className="text-left mb-2 text-gray-500 font-bold text-base">
                 Volante o Guía
@@ -267,7 +319,8 @@ const IngresoReclamo = () => {
                   type="text"
                   value={formData.lineaAerea}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 mb-2 transition-all border border-gray-200 rounded-md outline-blue-600/50 hover:border-blue-600/30 text-gray-500 cursor-pointer"
+                  disabled
+                  className="w-full px-3 py-2 mb-2 transition-all border border-gray-200 rounded-md outline-blue-600/50 hover:border-blue-600/30 text-gray-800 "
                 />
               </div>
             </div>
@@ -281,36 +334,48 @@ const IngresoReclamo = () => {
                 onChange={handleInputChange}
                 type="text"
                 placeholder="Bueno - Malo "
-                className="w-full px-3 py-2 mb-2 transition-all border border-gray-200 rounded-md outline-blue-600/50 hover:border-blue-600/30"
+                className="w-full px-3 py-2 mb-2 transition-all border border-gray-200 rounded-md outline-blue-600/50 hover:border-blue-600/30 text-gray-800"
               />
             </div>
             <div className="flex flex-col">
               <label className="text-left mb-2 text-gray-500 font-bold text-base">
-                Dni Responsable
+                Importador
               </label>
               <input
-                name="dni"
-                value={formData.dni}
+                name="nombreConsignatario"
+                value={formData.nombreConsignatario}
                 onChange={handleInputChange}
                 type="text"
-                placeholder="Dato "
-                className="w-full px-3 py-2 mb-2 transition-all border border-gray-200 rounded-md outline-blue-600/50 hover:border-blue-600/30"
+                disabled
+                className="w-full px-3 py-2 mb-2 transition-all border border-gray-200 rounded-md outline-blue-600/50 hover:border-blue-600/30 text-gray-800"
               />
             </div>
             <div className="flex flex-col">
               <label className="text-left mb-2 text-gray-500 font-bold text-base">
-                RUC
+                Agente de Carga
               </label>
               <input
-                name="ruc"
-                value={formData.ruc}
+                name="agenteCarga"
+                value={formData.agenteCarga}
                 onChange={handleInputChange}
                 type="text"
-                placeholder="Dato2 "
-                className="w-full px-3 py-2 mb-2 transition-all border border-gray-200 rounded-md outline-blue-600/50 hover:border-blue-600/30"
+                disabled
+                className="w-full px-3 py-2 mb-2 transition-all border border-gray-200 rounded-md outline-blue-600/50 hover:border-blue-600/30 text-gray-800"
               />
             </div>
-
+            <div className="flex flex-col">
+              <label className="text-left mb-2 text-gray-500 font-bold text-base">
+                Agente de Aduana
+              </label>
+              <input
+                name="agenteAduana"
+                value={formData.agenteAduana}
+                onChange={handleInputChange}
+                disabled
+                type="text"
+                className="w-full px-3 py-2 mb-2 transition-all border border-gray-200 rounded-md outline-blue-600/50 hover:border-blue-600/30 text-gray-800"
+              />
+            </div>
             <div className="w-full col-span-2">
               <button
                 // onClick={() => navigate("/listar-reclamos")}

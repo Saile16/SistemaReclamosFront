@@ -1,7 +1,7 @@
 package com.shohinSistemaReclamos.service;
 
-import com.shohinSistemaReclamos.entity.Reclamo;
-import com.shohinSistemaReclamos.repository.ReclamoRepository;
+import com.shohinSistemaReclamos.entity.primary.Reclamo;
+import com.shohinSistemaReclamos.repository.primary.ReclamoRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +32,7 @@ public class ReclamoService {
 
     @Transactional
     public List<?> listar(){
+        System.out.println("llama a esto ");
         List<?> lista=reclamoRepository.listar();
         return lista;
     }
