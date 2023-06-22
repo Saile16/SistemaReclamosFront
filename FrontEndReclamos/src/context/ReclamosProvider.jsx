@@ -28,6 +28,7 @@ const ReclamosProvider = ({ children }) => {
       });
       console.log(response);
       setRespondido(true);
+      listarReclamos();
     } catch (error) {
       console.error("Error:", error);
     }
@@ -43,6 +44,7 @@ const ReclamosProvider = ({ children }) => {
         fechaRespOperaciones: new Date(),
         observaciones,
       });
+      listarReclamos();
       console.log(response);
     } catch (error) {
       console.error("Error:", error);

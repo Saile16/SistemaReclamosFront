@@ -2,6 +2,8 @@ import { useState } from "react";
 import axios from "axios";
 import { format } from "date-fns";
 import useReclamos from "../hooks/useReclamos";
+import Modal from "./Modal";
+
 const FilaTablaReclamo = ({ reclamo }) => {
   //   console.log(reclamo);
   const {
@@ -110,36 +112,38 @@ const FilaTablaReclamo = ({ reclamo }) => {
         </td>
       </tr>
       {/* Modal */}
-      {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center z-10 ">
-          <div className="absolute inset-0 bg-gray-900 opacity-75"></div>
-          <div className="bg-white rounded-lg p-6 z-20 w-[590px]">
-            <h2 className="text-xl font-bold mb-4">Observaciones</h2>
-            <textarea
-              value={observaciones}
-              onChange={(e) => setObservaciones(e.target.value)}
-              className="w-full h-32 border border-gray-300 p-2"
-              placeholder="Escribe tus observaciones..."
-            ></textarea>
-            <div className="mt-4 flex justify-end">
-              <button
-                onClick={handleCloseModal}
-                className="px-4 py-2 bg-gray-400 text-white rounded-lg"
-                value="cerrar"
-              >
-                Cerrar
-              </button>
-              <button
-                className="ml-2 px-4 py-2 bg-green-600 text-white rounded-lg"
-                onClick={handleCloseModal}
-                value="guardar"
-              >
-                Guardar
-              </button>
+      {showModal ? (
+        <Modal>
+          <div className="fixed inset-0 flex items-center justify-center z-10 ">
+            <div className="absolute inset-0 bg-gray-900 opacity-75"></div>
+            <div className="bg-white rounded-lg p-6 z-20 w-[590px]">
+              <h2 className="text-xl font-bold mb-4">Observaciones</h2>
+              <textarea
+                value={observaciones}
+                onChange={(e) => setObservaciones(e.target.value)}
+                className="w-full h-32 border border-gray-300 p-2"
+                placeholder="Escribe tus observaciones..."
+              ></textarea>
+              <div className="mt-4 flex justify-end">
+                <button
+                  onClick={handleCloseModal}
+                  className="px-4 py-2 bg-gray-400 text-white rounded-lg"
+                  value="cerrar"
+                >
+                  Cerrar
+                </button>
+                <button
+                  className="ml-2 px-4 py-2 bg-green-600 text-white rounded-lg"
+                  onClick={handleCloseModal}
+                  value="guardar"
+                >
+                  Guardar
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        </Modal>
+      ) : null}
     </>
   );
 };
