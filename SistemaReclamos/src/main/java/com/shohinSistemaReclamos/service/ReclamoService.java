@@ -2,10 +2,10 @@ package com.shohinSistemaReclamos.service;
 
 import com.shohinSistemaReclamos.entity.primary.Reclamo;
 import com.shohinSistemaReclamos.repository.primary.ReclamoRepository;
-import jakarta.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
@@ -15,6 +15,7 @@ public class ReclamoService {
     ReclamoRepository reclamoRepository;
     @Transactional
     public List<?> grabar(Reclamo reclamo){
+        System.out.println("llama a esto grabar reclamos en service reclamos" + reclamo.getNumeroVolante());
         List<?> lista=reclamoRepository.listar();
         Long contador;
         if(lista.isEmpty()){
@@ -42,7 +43,6 @@ public class ReclamoService {
         List<?> lista=reclamoRepository.actualizar(reclamo);
         return lista;
     }
-
     public void generarCodigo(){
 
     }

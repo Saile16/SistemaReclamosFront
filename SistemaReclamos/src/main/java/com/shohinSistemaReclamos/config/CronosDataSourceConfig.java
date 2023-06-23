@@ -17,7 +17,7 @@ import java.util.Objects;
 import javax.sql.DataSource;
 
 @Configuration
-@PropertySource({"application.properties"})
+@PropertySource({"classpath:persistence-multiple-db-boot.properties"})
 @EnableJpaRepositories(
         basePackages = {"com.shohinSistemaReclamos.repository.primary"},
         entityManagerFactoryRef = "CronosEntityManager",
@@ -26,6 +26,7 @@ import javax.sql.DataSource;
 public class CronosDataSourceConfig {
     @Autowired
     private Environment env;
+
 
     @Bean
     public LocalContainerEntityManagerFactoryBean CronosEntityManager() {
@@ -48,19 +49,23 @@ public class CronosDataSourceConfig {
         return em;
     }
 
+
     @Bean
     //@ConfigurationProperties(prefix ="spring.datasource")
     public DataSource CronosDataSource() {
 
         DriverManagerDataSource dataSource
                 = new DriverManagerDataSource();
-        dataSource.setDriverClassName(Objects.requireNonNull(env.getProperty("spring.datasource.driver-class-name")));
-        dataSource.setUrl(env.getProperty("spring.datasource.url"));
-        dataSource.setUsername(env.getProperty("spring.datasource.username"));
-        dataSource.setPassword(env.getProperty("spring.datasource.password"));
+        dataSource.setDriverClassName(Objects.requireNonNull(env.getProperty("spring.datasource.driver-class-name-primary")));
+        System.out.println(env.getProperty("spring.datasource.driver-class-name-primary"));
+        dataSource.setUrl(env.getProperty("spring.datasource.url-primary"));
+        dataSource.setUsername(env.getProperty("spring.datasource.username-primary"));
+        dataSource.setPassword(env.getProperty("spring.datasource.password-primary"));
+        System.out.println(env.getProperty("spring.datasource.url-primary") +" --" +env.getProperty("spring.datasource.username-primary") );
         //return DataSourceBuilder.create().build();
         return dataSource;
     }
+
     @Bean
     public PlatformTransactionManager CronosTransactionManager() {
 

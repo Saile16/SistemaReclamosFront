@@ -13,7 +13,6 @@ public class Reclamo {
     private String codigo;
     @Column(name = "descripcion")
     private String descripcion;
-    private String dni;
     @Column(name="estado_carga")
     private String estadoCarga;
     @Column(name = "fecha_envio")
@@ -29,29 +28,33 @@ public class Reclamo {
     private String medio;
     @Column(name = "monto_reclamo")
     private String montoReclamo;
-    private String nombre;
     @Column(name="numero_volante")
     private String numeroVolante;
     private String observaciones;
     @Column(name = "persona_reclamo")
     private String personaReclamo;
-    private String ruc;
     @Column(name = "tipo_reclamo")
     private String tipoReclamo;
+
+    @Column(name = "awb")
+    private String guiMaster;
+
+    @Column(name = "hawb")
+    private String guiaHija;
+
     public Reclamo() {
     }
+
 
     public Reclamo(String codigo, String observaciones) {
         this.codigo = codigo;
         this.observaciones = observaciones;
     }
 
-    public Reclamo(Long id, String codigo, String descripcion, String dni, String estadoCarga, Date fechaEnvio, Date fechaRecepcion, Date fechaRespOperaciones, Date fechaRespSeguridad, String lineaAerea, String medio,
-                   String montoReclamo, String nombre, String numeroVolante, String observaciones, String personaReclamo, String ruc, String tipoReclamo) {
+    public Reclamo(Long id, String codigo, String descripcion, String estadoCarga, Date fechaEnvio, Date fechaRecepcion, Date fechaRespOperaciones, Date fechaRespSeguridad, String lineaAerea, String medio, String montoReclamo, String numeroVolante, String observaciones, String personaReclamo, String tipoReclamo, String guiMaster, String guiaHija) {
         this.id = id;
         this.codigo = codigo;
         this.descripcion = descripcion;
-        this.dni = dni;
         this.estadoCarga = estadoCarga;
         this.fechaEnvio = fechaEnvio;
         this.fechaRecepcion = fechaRecepcion;
@@ -60,12 +63,12 @@ public class Reclamo {
         this.lineaAerea = lineaAerea;
         this.medio = medio;
         this.montoReclamo = montoReclamo;
-        this.nombre = nombre;
         this.numeroVolante = numeroVolante;
         this.observaciones = observaciones;
         this.personaReclamo = personaReclamo;
-        this.ruc = ruc;
         this.tipoReclamo = tipoReclamo;
+        this.guiMaster = guiMaster;
+        this.guiaHija = guiaHija;
     }
 
     public Long getId() {
@@ -90,14 +93,6 @@ public class Reclamo {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
-    }
-
-    public String getDni() {
-        return dni;
-    }
-
-    public void setDni(String dni) {
-        this.dni = dni;
     }
 
     public String getEstadoCarga() {
@@ -164,14 +159,6 @@ public class Reclamo {
         this.montoReclamo = montoReclamo;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
     public String getNumeroVolante() {
         return numeroVolante;
     }
@@ -196,19 +183,27 @@ public class Reclamo {
         this.personaReclamo = personaReclamo;
     }
 
-    public String getRuc() {
-        return ruc;
-    }
-
-    public void setRuc(String ruc) {
-        this.ruc = ruc;
-    }
-
     public String getTipoReclamo() {
         return tipoReclamo;
     }
 
     public void setTipoReclamo(String tipoReclamo) {
         this.tipoReclamo = tipoReclamo;
+    }
+
+    public String getGuiMaster() {
+        return guiMaster;
+    }
+
+    public void setGuiMaster(String guiMaster) {
+        this.guiMaster = guiMaster;
+    }
+
+    public String getGuiaHija() {
+        return guiaHija;
+    }
+
+    public void setGuiaHija(String guiaHija) {
+        this.guiaHija = guiaHija;
     }
 }

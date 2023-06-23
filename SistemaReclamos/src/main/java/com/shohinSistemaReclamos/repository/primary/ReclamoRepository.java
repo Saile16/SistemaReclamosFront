@@ -17,39 +17,22 @@ public class ReclamoRepository {
     private EntityManager em;
 
     public List<?> grabar(Reclamo reclamo) {
-        em.createNativeQuery("INSERT INTO reclamo (codigo,descripcion,dni,estado_carga,fecha_recepcion,linea_aerea,medio,monto_reclamo,nombre,numero_volante," +
-                "persona_reclamo,ruc,tipo_reclamo,fecha_envio) VALUES ( ?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
+        em.createNativeQuery("INSERT INTO reclamo (codigo,descripcion,estado_carga,fecha_envio,fecha_recepcion,linea_aerea,medio,monto_reclamo,numero_volante,tipo_reclamo,awb,hawb) " +
+                        "VALUES ( ?,?,?,?,?,?,?,?,?,?,?,?)")
                 .setParameter(1,reclamo.getCodigo())
                 .setParameter(2,reclamo.getDescripcion())
-                .setParameter(3,reclamo.getDni())
-                .setParameter(4,reclamo.getEstadoCarga())
+                .setParameter(3,reclamo.getEstadoCarga())
+                .setParameter(4,reclamo.getFechaEnvio())
                 .setParameter(5,reclamo.getFechaRecepcion())
                 .setParameter(6,reclamo.getLineaAerea())
                 .setParameter(7,reclamo.getMedio())
                 .setParameter(8,reclamo.getMontoReclamo())
-                .setParameter(9,reclamo.getNombre())
-                .setParameter(10,reclamo.getNumeroVolante())
-                .setParameter(11,reclamo.getPersonaReclamo())
-                .setParameter(12,reclamo.getRuc())
-                .setParameter(13,reclamo.getTipoReclamo())
-                .setParameter(14,reclamo.getFechaEnvio())
+                .setParameter(9,reclamo.getNumeroVolante())
+                .setParameter(10,reclamo.getTipoReclamo())
+                .setParameter(11,reclamo.getGuiMaster())
+                .setParameter(12,reclamo.getGuiaHija())
                 .executeUpdate();
-
-      /*  String sql = (
-                "INSERT INTO reclamo (codigo,descripcion,dni,estado_carga,fecha_recepcion,linea_aerea,medio,monto_reclamo,nombre,numero_volante," +
-                        "persona_reclamo,ruc,tipo_reclamo) "
-        );
-        String values="";
-        if(reclamo.getCodigo()!=null){
-            values+="VALUES ( "+reclamo.getCodigo()+","+reclamo.getDescripcion()+","+reclamo.getDni()+","+reclamo.getEstadoCarga()+","+reclamo.getFechaRecepcion()+","+
-            reclamo.getLineaAerea()+","+reclamo.getMedio()+","+reclamo.getMontoReclamo()+","+reclamo.getNombre()+","+reclamo.getNumeroVolante()+","+
-            reclamo.getPersonaReclamo()+","+reclamo.getRuc()+","+reclamo.getTipoReclamo()+")";
-        }
-        System.out.println(sql+ "cuantas veces");*/
-        //int valor = em.createNativeQuery(sql).executeUpdate();
-
         em.close();
-
         return Collections.singletonList(1);
 
     }
@@ -63,13 +46,12 @@ public class ReclamoRepository {
 
         Query query = em.createNativeQuery(sql + orderBy);
         List<Object[]> lista = query.getResultList();
+        System.out.println("cual es el sql " + sql + orderBy);
         em.close();
-
         return lista.stream()
                 .map(t -> new Reclamo(
-                        (Long) t[0], (String) t[1], (String) t[2], (String) t[3], (String) t[4], (Date) t[5], (Date) t[6], (Date) t[7], (Date) t[8], (String) t[9], (String) t[10], (String) t[11],
-                        (String) t[12], (String) t[13], (String) t[14], (String) t[15], (String) t[16], (String) t[17]
-
+                        (Long) t[0], (String) t[1], (String) t[2], (String) t[3], (Date) t[4], (Date) t[5], (Date) t[6], (Date) t[7], (String) t[8], (String) t[9], (String) t[10], (String) t[11], (String) t[12],
+                        (String) t[13], (String) t[14], (String) t[15], (String) t[16]
                 ))
                 .collect(Collectors.toList());
     }

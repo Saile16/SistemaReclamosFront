@@ -50,13 +50,92 @@ const ReclamosProvider = ({ children }) => {
       console.error("Error:", error);
     }
   };
+  const handleForm = async (formData) => {
+    // try {
+    //   const response = await axios.post(
+    //     "http://localhost:8080/api/reclamos",
+    //     formData
+    //   );
+    //   console.log(response);
+    //   // navigate("/listar-reclamos");
+    // } catch (error) {
+    //   console.error("Error:", error);
+    // }
+    console.log(formData);
+  };
 
+  const handleKeyDown = async (formData, setFormData) => {
+    setLoading(true);
+    setError(false);
+    try {
+      const response = await axios.post("http://localhost:8080/api/datos", {
+        almacen: formData.almacen,
+        numeroVolante: formData.numeroVolante,
+      });
+      console.log({
+        almacen: formData.almacen,
+        numeroVolante: formData.numeroVolante,
+      });
+      console.log(response.data[0]);
+      const {
+        numeroVolante,
+        lineaAerea,
+        estadoCarga,
+        nombreConsignatario,
+        agenteCarga,
+        agenteAduana,
+        guiaMaster,
+        guiaHija,
+        tipoIngreso,
+        fechaVuelo,
+        numeroVuelo,
+      } = response.data[0];
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        numeroVolante,
+        lineaAerea,
+        estadoCarga,
+        nombreConsignatario,
+        agenteCarga,
+        agenteAduana,
+        guiaMaster,
+        guiaHija,
+        tipoIngreso,
+        fechaVuelo,
+        numeroVuelo,
+      }));
+      setLoading(false);
+    } catch (error) {
+      console.error("Error:", error);
+      setError(true);
+      setLoading(false);
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        medio: "",
+        lineaAerea: "",
+        estadoCarga: "",
+        nombreConsignatario: "",
+        agenteCarga: "",
+        agenteAduana: "",
+        guiaMaster: "",
+        guiaHija: "",
+        tipoIngreso: "",
+        fechaVuelo: "",
+        numeroVuelo: "",
+      }));
+      console.log(error, "llama ? ");
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <ReclamosContext.Provider
       value={{
         listarReclamos,
         handleSeguridad,
         handleEnviarRespuestaOperaciones,
+        handleForm,
+        handleKeyDown,
         reclamos,
         loading,
         error,

@@ -5,6 +5,7 @@ import com.shohinSistemaReclamos.entity.second.Volante;
 import com.shohinSistemaReclamos.service.ReclamoService;
 import com.shohinSistemaReclamos.service.VolanteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,7 @@ public class ReclamoController {
             @RequestBody Volante volante
     ){
         Map<String,Object> response = new HashMap<>();
+        System.out.println("llama a esto  listar controller?? " + volante.getNumeroVolante());
         try{
             System.out.println("llama esto " + volante);
             List<Volante> listaDocumento=volanteService.datosVolante(volante);
@@ -53,6 +55,7 @@ public class ReclamoController {
             ){
         Map<String,Object> response = new HashMap<>();
         try{
+            System.out.println("llama a esto reclamos controller /reclamos?? " + reclamo.getNumeroVolante());
             List<?> reclamos=reclamoService.grabar(reclamo);
             if(reclamos.isEmpty()){
                 response.put("Mensaje","No existen datos en esa fecha");

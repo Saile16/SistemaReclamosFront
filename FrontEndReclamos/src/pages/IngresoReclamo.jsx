@@ -1,12 +1,14 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Spinner from "../components/Spinner";
 import Mensajes from "../components/Mensajes";
+import useReclamos from "../hooks/useReclamos";
 
 const IngresoReclamo = () => {
+  const { handleForm, handleKeyDown } = useReclamos();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [formData, setFormData] = useState({
@@ -39,10 +41,10 @@ const IngresoReclamo = () => {
     }));
   };
 
-  const handleKeyDown = (event) => {
+  const handleFormKeyDown = async (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
-      fetchData();
+      handleKeyDown(formData, setFormData);
     }
   };
   const handleDateChange = (date) => {
@@ -52,89 +54,22 @@ const IngresoReclamo = () => {
     }));
   };
 
-  const fetchData = async () => {
-    setLoading(true);
-    setError(false);
-    try {
-      const response = await axios.post("http://localhost:8080/api/datos", {
-        almacen: formData.almacen,
-        numeroVolante: formData.numeroVolante,
-      });
-      console.log({
-        almacen: formData.almacen,
-        numeroVolante: formData.numeroVolante,
-      });
-      console.log(response.data[0]);
-      const {
-        numeroVolante,
-        lineaAerea,
-        estadoCarga,
-        nombreConsignatario,
-        agenteCarga,
-        agenteAduana,
-        guiaMaster,
-        guiaHija,
-        tipoIngreso,
-        fechaVuelo,
-        numeroVuelo,
-      } = response.data[0];
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        numeroVolante,
-        lineaAerea,
-        estadoCarga,
-        nombreConsignatario,
-        agenteCarga,
-        agenteAduana,
-        guiaMaster,
-        guiaHija,
-        tipoIngreso,
-        fechaVuelo,
-        numeroVuelo,
-      }));
-      setLoading(false);
-    } catch (error) {
-      console.error("Error:", error);
-      setError(true);
-      setLoading(false);
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        medio: "",
-        lineaAerea: "",
-        estadoCarga: "",
-        nombreConsignatario: "",
-        agenteCarga: "",
-        agenteAduana: "",
-        guiaMaster: "",
-        guiaHija: "",
-        tipoIngreso: "",
-        fechaVuelo: "",
-        numeroVuelo: "",
-      }));
-      console.log(error, "llama ? ");
-    } finally {
-      setLoading(false);
-    }
-  };
-  const navigate = useNavigate();
-
-  const handleSubmit = async (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     const updatedFormData = {
-      ...formData,
+      numeroVolante: formData.numeroVolante,
+      descripcion: formData.descripcion,
+      tipoReclamo: formData.tipoReclamo,
+      fechaRecepcion: formData.fechaRecepcion,
+      guiaMaster: formData.guiaMaster,
+      guiaHija: formData.guiaHija,
+      tipoIngreso: formData.tipoIngreso,
+      fechaVuelo: formData.fechaVuelo,
+      numeroVuelo: formData.numeroVuelo,
+      estadoCarga: formData.estadoCarga,
       fechaEnvio: new Date(),
     };
-    console.log(updatedFormData);
-    try {
-      const response = await axios.post(
-        "http://localhost:8080/api/reclamos",
-        updatedFormData
-      );
-      console.log(response);
-      navigate("/listar-reclamos");
-    } catch (error) {
-      console.error("Error:", error);
-    }
+    handleForm(updatedFormData);
   };
 
   return (
@@ -144,7 +79,10 @@ const IngresoReclamo = () => {
           <h1 className="text-2xl text-center font-bold mb-4">
             Registro reclamo
           </h1>
-          <form className="grid grid-cols-2 gap-4 p-5" onSubmit={handleSubmit}>
+          <form
+            className="grid grid-cols-2 gap-4 p-5"
+            onSubmit={handleFormSubmit}
+          >
             <div className="flex flex-col">
               <label className="text-left mb-2 text-gray-500 font-bold text-base">
                 Almacen
@@ -171,7 +109,7 @@ const IngresoReclamo = () => {
                 type="text"
                 value={formData.numeroVolante}
                 onChange={handleInputChange}
-                onKeyDown={handleKeyDown}
+                onKeyDown={handleFormKeyDown}
                 placeholder="Número de volante o guía"
                 className="w-full px-3 py-2 mb-2 transition-all border border-gray-200 rounded-md outline-blue-600/50 hover:border-blue-600/30"
               />
@@ -216,19 +154,7 @@ const IngresoReclamo = () => {
                 </select>
               </div>
             </div>
-            <div className="flex flex-col">
-              <label className="text-left mb-2 text-gray-500 font-bold text-base">
-                Nombre
-              </label>
-              <input
-                name="nombre"
-                type="text"
-                placeholder="Nombre de la persona que reclama"
-                className="w-full px-3 py-2 mb-2 transition-all border border-gray-200 rounded-md outline-blue-600/50 hover:border-blue-600/30"
-                onChange={handleInputChange}
-                value={formData.nombre}
-              />
-            </div>
+
             <div className=" flex flex-col">
               <label className="text-left mb-2 text-gray-500 font-bold text-base">
                 Fecha de Recepción
@@ -376,14 +302,20 @@ const IngresoReclamo = () => {
                 className="w-full px-3 py-2 mb-2 transition-all border border-gray-200 rounded-md outline-blue-600/50 hover:border-blue-600/30 text-gray-800"
               />
             </div>
-            <div className="w-full col-span-2">
+            <div className="w-full col-span-2 flex items-center justify-evenly">
               <button
                 // onClick={() => navigate("/listar-reclamos")}
                 type="submit"
-                className="w-1/2 mt-2 p-2.5 text-sm font-medium text-white bg-blue-600 rounded-md text-center"
+                className="w-1/4 mt-2 p-2.5 text-sm font-medium text-white bg-blue-600 rounded-md text-center"
               >
                 Registrar Reclamo
               </button>
+              <Link
+                className="w-1/4 mt-2 p-2.5 text-sm font-medium text-white bg-teal-600 rounded-md text-center"
+                to="/listar-reclamos"
+              >
+                Lista Reclamos
+              </Link>
             </div>
           </form>
         </div>

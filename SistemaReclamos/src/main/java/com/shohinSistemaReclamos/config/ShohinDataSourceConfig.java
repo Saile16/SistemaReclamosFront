@@ -19,13 +19,14 @@ import java.util.Objects;
 
 
 @Configuration
-@PropertySource({"application.properties"})
+@PropertySource({"classpath:persistence-multiple-db-boot.properties"})
 @EnableJpaRepositories(basePackages = {"com.shohinSistemaReclamos.repository.second"},
         entityManagerFactoryRef = "ShohinEntityManager",
         transactionManagerRef = "ShohinTransactionManager")
 public class ShohinDataSourceConfig {
     @Autowired
     private Environment env;
+
     @Bean
     @Primary
     public LocalContainerEntityManagerFactoryBean ShohinEntityManager() {
@@ -55,10 +56,10 @@ public class ShohinDataSourceConfig {
 
         DriverManagerDataSource dataSource
                 = new DriverManagerDataSource();
-        dataSource.setDriverClassName(Objects.requireNonNull(env.getProperty("spring.second-datasource.driver-class-name")));
-        dataSource.setUrl(env.getProperty("spring.second-datasource.url"));
-        dataSource.setUsername(env.getProperty("spring.second-datasource.username"));
-        dataSource.setPassword(env.getProperty("spring.second-datasource.password"));
+        dataSource.setDriverClassName(Objects.requireNonNull(env.getProperty("spring.datasource.driver-class-name-secondary")));
+        dataSource.setUrl(env.getProperty("spring.datasource.url-secondary"));
+        dataSource.setUsername(env.getProperty("spring.datasource.username-secondary"));
+        dataSource.setPassword(env.getProperty("spring.datasource.password-secondary"));
         //return DataSourceBuilder.create().build();
         return dataSource;
     }
