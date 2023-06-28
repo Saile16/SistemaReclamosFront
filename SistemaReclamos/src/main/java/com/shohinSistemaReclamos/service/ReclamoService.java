@@ -16,16 +16,20 @@ public class ReclamoService {
     @Transactional
     public List<?> grabar(Reclamo reclamo){
         System.out.println("llama a esto grabar reclamos en service reclamos" + reclamo.getNumeroVolante());
+
         List<?> lista=reclamoRepository.listar();
         Long contador;
+        String tipoReclamo = reclamo.getTipoReclamo();
+        String secuencia;
         if(lista.isEmpty()){
             String ultimoReclamo = reclamo.getNumeroVolante();
             contador = 1L;
-            String secuencia = String.format("TRA-%s-%05d", ultimoReclamo, contador);
+            secuencia = String.format("TRA-%s-%05d", ultimoReclamo, contador);
             reclamo.setCodigo(secuencia);
         }
         contador = (long) lista.size();
-        String secuencia = String.format("TRA-%s-%05d", reclamo.getNumeroVolante(), contador+1);
+        System.out.println("numero contador : " + contador);
+        secuencia = String.format("TRA-%s-%05d", reclamo.getNumeroVolante(), contador+1);
         reclamo.setCodigo(secuencia);
         List<?> datos=reclamoRepository.grabar(reclamo);
         return datos;
@@ -40,6 +44,7 @@ public class ReclamoService {
 
     @Transactional
     public List<?> actualizar(Reclamo reclamo){
+        System.out.println("tlegal???? : " + reclamo.getFechaRecepcionCliente());
         List<?> lista=reclamoRepository.actualizar(reclamo);
         return lista;
     }

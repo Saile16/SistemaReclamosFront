@@ -21,39 +21,14 @@ import java.util.Map;
 public class ReclamoController {
 
     @Autowired
-    VolanteService volanteService;
-
-    @Autowired
     ReclamoService reclamoService;
 
-    @PostMapping(value="/datos")
-    public ResponseEntity<?> listar(
-            @RequestBody Volante volante
-    ){
-        Map<String,Object> response = new HashMap<>();
-        System.out.println("llama a esto  listar controller?? " + volante.getNumeroVolante());
-        try{
-            System.out.println("llama esto " + volante);
-            List<Volante> listaDocumento=volanteService.datosVolante(volante);
-            if(listaDocumento.isEmpty()){
-                response.put("Mensaje","No existen datos en esa fecha");
-                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-            }
-
-            return new ResponseEntity<>(listaDocumento,HttpStatus.OK);
-
-        }
-        catch (DataAccessException e){
-            response.put("Mensaje","Error al consultar los datos");
-            response.put("Error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-            return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
-        }
-    }
     @PostMapping(value="/reclamos")
     public ResponseEntity<?> grabarReclamo(
             @RequestBody Reclamo reclamo
             ){
         Map<String,Object> response = new HashMap<>();
+        System.out.println("reclamos + "+ reclamo.getEstado());
         try{
             System.out.println("llama a esto reclamos controller /reclamos?? " + reclamo.getNumeroVolante());
             List<?> reclamos=reclamoService.grabar(reclamo);

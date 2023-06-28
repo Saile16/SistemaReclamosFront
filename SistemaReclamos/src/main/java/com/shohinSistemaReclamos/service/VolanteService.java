@@ -13,7 +13,6 @@ public class VolanteService {
 
     @Autowired
     VolanteRepository volanteRepository;
-    @Transactional(transactionManager ="ShohinTransactionManager")
     public List<Volante> datosVolante(Volante volante){
         List<Volante> datos=volanteRepository.datosVolante(volante);
         return datos;

@@ -1,26 +1,32 @@
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
-import DatePicker from "react-datepicker";
+import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Spinner from "../components/Spinner";
 import Mensajes from "../components/Mensajes";
 import useReclamos from "../hooks/useReclamos";
-
+import es from "date-fns/locale/es";
+registerLocale("es", es);
 const IngresoReclamo = () => {
+  const navigate = useNavigate();
+  const { error: errorProvider, loading } = useReclamos();
   const { handleForm, handleKeyDown } = useReclamos();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+
+  const [error, setError] = useState({
+    error: false,
+    mensaje: "",
+  });
   const [formData, setFormData] = useState({
     almacen: "dt",
     numeroVolante: "",
     tipoReclamo: "",
     personaReclamo: "",
-    nombre: "",
     fechaRecepcion: "",
     montoReclamo: "",
+    motivoReclamo: "",
     descripcion: "",
-    medio: "",
+    medio: "correo",
     lineaAerea: "",
     estadoCarga: "",
     nombreConsignatario: "",
@@ -57,19 +63,25 @@ const IngresoReclamo = () => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     const updatedFormData = {
-      numeroVolante: formData.numeroVolante,
-      descripcion: formData.descripcion,
-      tipoReclamo: formData.tipoReclamo,
-      fechaRecepcion: formData.fechaRecepcion,
-      guiaMaster: formData.guiaMaster,
-      guiaHija: formData.guiaHija,
-      tipoIngreso: formData.tipoIngreso,
-      fechaVuelo: formData.fechaVuelo,
-      numeroVuelo: formData.numeroVuelo,
-      estadoCarga: formData.estadoCarga,
-      fechaEnvio: new Date(),
+      ...formData,
+      estadoCarga: formData.estadoCarga > 0 ? "Malo" : "Bueno",
+      estado: "S",
     };
-    handleForm(updatedFormData);
+    if (Object.values(updatedFormData).includes("")) {
+      console.log("esta vacio un eleentos");
+      setError({
+        error: true,
+        mensaje: "Verifique que ingresó todos los campos ",
+      });
+      return;
+    }
+    console.log(updatedFormData);
+    await handleForm(updatedFormData);
+    navigate("/listar-reclamos");
+    setError({
+      error: false,
+      mensaje: "",
+    });
   };
 
   return (
@@ -83,7 +95,7 @@ const IngresoReclamo = () => {
             className="grid grid-cols-2 gap-4 p-5"
             onSubmit={handleFormSubmit}
           >
-            <div className="flex flex-col">
+            <div className="flex flex-col col-span-1">
               <label className="text-left mb-2 text-gray-500 font-bold text-base">
                 Almacen
               </label>
@@ -100,7 +112,7 @@ const IngresoReclamo = () => {
                 </select>
               </div>
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col col-span-1">
               <label className="text-left mb-2 text-gray-500 font-bold text-base">
                 Volante o Guía
               </label>
@@ -114,6 +126,7 @@ const IngresoReclamo = () => {
                 className="w-full px-3 py-2 mb-2 transition-all border border-gray-200 rounded-md outline-blue-600/50 hover:border-blue-600/30"
               />
             </div>
+
             <div className="flex flex-col">
               <label className="text-left mb-2 text-gray-500 font-bold text-base">
                 Tipo de Reclamo
@@ -147,10 +160,12 @@ const IngresoReclamo = () => {
                   <option value="----------" defaultValue>
                     --------
                   </option>
-                  <option value="OP">Tipo Operador</option>
-                  <option value="Tipo2">Tipo 2</option>
-                  <option value="Tipo3">Tipo 3</option>
-                  <option value="Tipo4">Tipo 4</option>
+                  <option value="Agente Aduana">Agente de Aduanas</option>
+                  <option value="Agente Carga">Agente de Carga</option>
+                  <option value="Deposito Temporal">Deposito Temporal</option>
+                  <option value="ESER">ESER</option>
+                  <option value="Importador">Importador</option>
+                  <option value="Linea Aerea">Linea Aerea</option>
                 </select>
               </div>
             </div>
@@ -159,13 +174,6 @@ const IngresoReclamo = () => {
               <label className="text-left mb-2 text-gray-500 font-bold text-base">
                 Fecha de Recepción
               </label>
-              {/* <input
-                name="fechaRecepcion"
-                type="date"
-                className="w-full px-3 py-2 mb-2 transition-all border border-gray-200 rounded-md outline-blue-600/50 hover:border-blue-600/30 text-gray-500 cursor-pointer"
-                value={formData.fechaRecepcion}
-                onChange={handleInputChange}
-              /> */}
               <DatePicker
                 name="fechaRecepcion"
                 selected={formData.fechaRecepcion}
@@ -175,6 +183,8 @@ const IngresoReclamo = () => {
                 timeIntervals={15}
                 dateFormat="yyyy-MM-dd HH:mm"
                 placeholderText="Seleccione fecha y hora"
+                locale="es"
+                timeCaption="Hora"
                 className="w-full bg-white border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -193,7 +203,20 @@ const IngresoReclamo = () => {
             </div>
             <div className="flex flex-col col-span-2">
               <label className="text-left mb-2 text-gray-500 font-bold text-base">
-                Ingrese su reclamo
+                Motivo del Reclamo
+              </label>
+              <input
+                name="motivoReclamo"
+                type="text"
+                placeholder="Motivo del Reclamo"
+                className="w-full px-3 py-2 mb-2 transition-all border border-gray-200 rounded-md outline-blue-600/50 hover:border-blue-600/30"
+                value={formData.motivoReclamo}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="flex flex-col col-span-2">
+              <label className="text-left mb-2 text-gray-500 font-bold text-base">
+                Detalle del reclamo
               </label>
               <textarea
                 name="descripcion"
@@ -210,9 +233,11 @@ const IngresoReclamo = () => {
               </label>
               <div className="relative flex items-center mb-2 w-full after:absolute after:right-3 after:border-black/70 after:border-b after:border-r after:transform after:rotate-45 after:h-[8px] after:w-[8px]">
                 <select
-                  name="language"
+                  name="medio"
                   required
                   className="w-full px-3 py-2 text-black transition-all border border-gray-200 rounded-md outline-blue-600/50 appearance-none bg-white cursor-pointer hover:border-blue-600/30 invalid:text-gray-400"
+                  value={formData.medio}
+                  onChange={handleInputChange}
                 >
                   <option value="correo">Correo</option>
                   <option value="carta  ">Carta</option>
@@ -225,21 +250,6 @@ const IngresoReclamo = () => {
               </label>
               {/* <div className="relative flex items-center mb-2 w-full after:absolute after:right-3 after:border-black/70 after:border-b after:border-r after:transform after:rotate-45 after:h-[8px] after:w-[8px]"> */}
               <div className="relative flex items-center mb-2 w-full ">
-                {/* <select
-                  name="language"
-                  required
-                  value={formData.lineaAerea}
-                  className="w-full px-3 py-2 text-black transition-all border border-gray-200 rounded-md outline-blue-600/50 appearance-none bg-white cursor-pointer hover:border-blue-600/30 invalid:text-gray-400"
-                >
-                  <option value="" disabled selected>
-                    Seleccione
-                  </option>
-                  <option value="1">Tampa Cargo S.A</option>
-                  <option value="1">2</option>
-                  <option value="1">T3</option>
-                  <option value="1">Ta4A</option>
-                  <option value="carta  ">Carta</option>
-                </select> */}
                 <input
                   name="lineaAerea"
                   type="text"
@@ -256,9 +266,16 @@ const IngresoReclamo = () => {
               </label>
               <input
                 name="estadoCarga"
-                value={formData.estadoCarga}
+                value={
+                  formData.estadoCarga === ""
+                    ? ""
+                    : formData.estadoCarga > 0
+                    ? "Malo"
+                    : "Bueno"
+                }
                 onChange={handleInputChange}
                 type="text"
+                disabled={true}
                 placeholder="Bueno - Malo "
                 className="w-full px-3 py-2 mb-2 transition-all border border-gray-200 rounded-md outline-blue-600/50 hover:border-blue-600/30 text-gray-800"
               />
@@ -272,7 +289,6 @@ const IngresoReclamo = () => {
                 value={formData.nombreConsignatario}
                 onChange={handleInputChange}
                 type="text"
-                disabled
                 className="w-full px-3 py-2 mb-2 transition-all border border-gray-200 rounded-md outline-blue-600/50 hover:border-blue-600/30 text-gray-800"
               />
             </div>
@@ -285,7 +301,6 @@ const IngresoReclamo = () => {
                 value={formData.agenteCarga}
                 onChange={handleInputChange}
                 type="text"
-                disabled
                 className="w-full px-3 py-2 mb-2 transition-all border border-gray-200 rounded-md outline-blue-600/50 hover:border-blue-600/30 text-gray-800"
               />
             </div>
@@ -297,14 +312,12 @@ const IngresoReclamo = () => {
                 name="agenteAduana"
                 value={formData.agenteAduana}
                 onChange={handleInputChange}
-                disabled
                 type="text"
                 className="w-full px-3 py-2 mb-2 transition-all border border-gray-200 rounded-md outline-blue-600/50 hover:border-blue-600/30 text-gray-800"
               />
             </div>
             <div className="w-full col-span-2 flex items-center justify-evenly">
               <button
-                // onClick={() => navigate("/listar-reclamos")}
                 type="submit"
                 className="w-1/4 mt-2 p-2.5 text-sm font-medium text-white bg-blue-600 rounded-md text-center"
               >
@@ -321,7 +334,8 @@ const IngresoReclamo = () => {
         </div>
       </div>
       {loading && <Spinner />}
-      {error && <Mensajes />}
+      {error.error && <Mensajes>{error.mensaje}</Mensajes>}
+      {errorProvider.error && <Mensajes>{errorProvider.mensaje}</Mensajes>}
     </div>
   );
 };

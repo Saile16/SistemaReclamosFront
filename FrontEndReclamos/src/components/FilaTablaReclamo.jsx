@@ -1,21 +1,22 @@
 import { useState } from "react";
-import axios from "axios";
 import { format } from "date-fns";
 import useReclamos from "../hooks/useReclamos";
 import Modal from "./Modal";
+import { calculoHorasReclamo } from "../utils/calculoHorasReclamo";
+import { calculoDiasRestantes } from "../utils/calculoDiasRestantes";
 
 const FilaTablaReclamo = ({ reclamo }) => {
-  //   console.log(reclamo);
   const {
     handleSeguridad,
     handleEnviarRespuestaOperaciones,
-    loading,
-    error,
-    respondido,
+    handleEnviarRespuestaLegal,
+    handleFechaEnvio,
+    handleCerrarReclamo,
+    handleRecepcionCliente,
   } = useReclamos();
   const [observaciones, setObservaciones] = useState("");
   const [showModal, setShowModal] = useState(false);
-
+  // console.log(reclamo);
   const handleOpenModal = () => {
     setShowModal(true);
   };
@@ -33,24 +34,31 @@ const FilaTablaReclamo = ({ reclamo }) => {
     <>
       <tr
         key={reclamo.id}
-        // className={`${
-        //   reclamo.id == "1"
-        //     ? "bg-green-500 text-white"
-        //     : reclamo.id == "2"
-        //     ? "bg-amber-200"
-        //     : "bg-red-300"
-        // }`}
+        className={`${
+          reclamo.estado == "S"
+            ? " text-white transition duration-300 ease-in-out hover:bg-amber-200"
+            : reclamo.estado == "A"
+            ? "bg-green-500"
+            : "bg-red-300"
+        }`}
       >
         <td className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
           {reclamo.codigo}
         </td>
         <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
-          {format(new Date(reclamo.fechaRecepcion), "dd/MM/yyyy HH:mm:ss")}
+          {format(new Date(reclamo.fechaRecepcion), "dd/MM/yyyy HH:mm")}
         </td>
         <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
-          {reclamo.fechaEnvio != null
-            ? format(new Date(reclamo.fechaEnvio), "dd/MM/yyyy HH:mm:ss")
-            : "-----"}
+          {!reclamo.fechaEnvio ? (
+            <button
+              onClick={() => handleFechaEnvio(reclamo.numeroVolante)}
+              className="ml-2 focus:outline-none text-white bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2"
+            >
+              Enviar
+            </button>
+          ) : (
+            format(new Date(reclamo.fechaEnvio), "dd/MM/yyyy HH:mm")
+          )}
         </td>
         <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
           {!reclamo.fechaRespSeguridad ? (
@@ -58,27 +66,24 @@ const FilaTablaReclamo = ({ reclamo }) => {
               onClick={() => handleSeguridad(reclamo.numeroVolante)}
               className="ml-2 focus:outline-none text-white bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2"
             >
-              Responder
+              Confirmar
             </button>
           ) : (
-            format(new Date(reclamo.fechaRespSeguridad), "dd/MM/yyyy HH:mm:ss")
+            format(new Date(reclamo.fechaRespSeguridad), "dd/MM/yyyy HH:mm")
           )}
         </td>
-        <td className="px-6 py-4 text-sm font-medium text-center whitespace-nowrap flex flex-col items-center justify-center">
+        <td className="text-gray-800 px-6 py-4 text-sm font-medium text-center whitespace-nowrap flex flex-col items-center justify-center">
           {!reclamo.observaciones ? (
             <button
               onClick={handleOpenModal}
               // onChange={(e) => setObservaciones(e.target.value)}
               type="button"
-              className="ml-2 focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+              className="mt-4 focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
             >
               Observaciones
             </button>
           ) : reclamo.fechaRespOperaciones != null ? (
-            format(
-              new Date(reclamo.fechaRespOperaciones),
-              "dd/MM/yyyy HH:mm:ss"
-            )
+            format(new Date(reclamo.fechaRespOperaciones), "dd/MM/yyyy HH:mm")
           ) : (
             "No envió respuesta"
           )}
@@ -98,23 +103,72 @@ const FilaTablaReclamo = ({ reclamo }) => {
             ""
           )}
         </td>
+
         <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
-          Cita
+          <td className="px-6 py-4 text-sm font-medium text-center whitespace-nowrap flex flex-col items-center justify-center">
+            {!reclamo.fechaRespLegal ? (
+              <button
+                onClick={() =>
+                  handleEnviarRespuestaLegal(reclamo.numeroVolante)
+                }
+                // onChange={(e) => setObservaciones(e.target.value)}
+                type="button"
+                className="ml-2 focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+              >
+                Confirmar Entrega
+              </button>
+            ) : reclamo.fechaRespLegal != null ? (
+              format(new Date(reclamo.fechaRespLegal), "dd/MM/yyyy HH:mm")
+            ) : (
+              "No envió respuesta"
+            )}
+          </td>
         </td>
         <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
-          Si/No
+          {!reclamo.fechaRecepcionCliente ? (
+            <button
+              onClick={() => handleRecepcionCliente(reclamo.numeroVolante)}
+              // onChange={(e) => setObservaciones(e.target.value)}
+              type="button"
+              className="ml-2 focus:outline-none text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+            >
+              Cliente Recepcionó
+            </button>
+          ) : reclamo.fechaRecepcionCliente != null ? (
+            format(new Date(reclamo.fechaRecepcionCliente), "dd/MM/yyyy HH:mm")
+          ) : (
+            "No envió respuesta"
+          )}
+        </td>
+
+        <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
+          {!reclamo.fechaCierre ? (
+            <button
+              onClick={() => handleCerrarReclamo(reclamo.numeroVolante)}
+              className="ml-2 focus:outline-none text-white bg-red-800 hover:bg-red-700 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2"
+            >
+              Cerrar Reclamo
+            </button>
+          ) : (
+            format(new Date(reclamo.fechaCierre), "dd/MM/yyyy HH:mm")
+          )}
         </td>
         <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
-          Dias restantes
+          {reclamo.fechaCierre
+            ? calculoHorasReclamo(reclamo.fechaRecepcion, reclamo.fechaCierre) +
+              " horas"
+            : "----"}
         </td>
-        <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
-          Cierre fecha
-        </td>
+        {/* <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
+          {reclamo.fechaCierre != null
+            ? calculoDiasRestantes(reclamo.fechaCierre)
+            : "---"}
+        </td> */}
       </tr>
       {/* Modal */}
       {showModal ? (
         <Modal>
-          <div className="fixed inset-0 flex items-center justify-center z-10 ">
+          <div className="fixed inset-0 flex items-center justify-center z-10">
             <div className="absolute inset-0 bg-gray-900 opacity-75"></div>
             <div className="bg-white rounded-lg p-6 z-20 w-[590px]">
               <h2 className="text-xl font-bold mb-4">Observaciones</h2>

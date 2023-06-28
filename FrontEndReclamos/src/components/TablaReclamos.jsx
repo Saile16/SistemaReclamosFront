@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import FilaTablaReclamo from "./FilaTablaReclamo";
 import ReclamosContext from "../context/ReclamosProvider";
 import useReclamos from "../hooks/useReclamos";
@@ -10,6 +10,7 @@ const TablaReclamos = () => {
     listarReclamos();
   }, []);
 
+  const [filtroCodigo, setFiltroCodigo] = useState("");
   if (loading) return <Spinner />;
   return (
     <>
@@ -18,19 +19,19 @@ const TablaReclamos = () => {
           <tr>
             <th
               scope="col"
-              className="px-6 py-3 text-[12px] font-bold text-left text-gray-500 uppercase "
+              className="px-6 py-3 text-[12px] font-bold text-center text-gray-500 uppercase "
             >
-              C. de Reclamo
+              Código Reclamo
             </th>
             <th
               scope="col"
-              className="px-6 py-3 text-[12px] font-bold text-left text-gray-500 uppercase "
+              className="px-6 py-3 text-[12px] font-bold text-center text-gray-500 uppercase "
             >
               F. Recepción
             </th>
             <th
               scope="col"
-              className="px-6 py-3 text-[12px] font-bold text-left text-gray-500 uppercase "
+              className="px-6 py-3 text-[12px] font-bold text-center text-gray-500 uppercase "
             >
               F. Envio
             </th>
@@ -42,33 +43,34 @@ const TablaReclamos = () => {
             </th>
             <th
               scope="col"
-              className="px-6 py-3 text-[12px] font-bold text-right text-gray-500 uppercase "
+              className="px-6 py-3 text-[12px] font-bold text-center text-gray-500 uppercase "
             >
               F. Respuesta Operaciones
             </th>
             <th
               scope="col"
-              className="px-6 py-3 text-[12px] font-bold text-right text-gray-500 uppercase "
+              className="px-6 py-3 text-[12px] font-bold text-center text-gray-500 uppercase "
             >
-              F. Fecha Cita
+              F. Respuesta Legal
             </th>
             <th
               scope="col"
-              className="px-6 py-3 text-[12px] font-bold text-right text-gray-500 uppercase "
+              className="px-6 py-3 text-[12px] font-bold text-center text-gray-500 uppercase "
             >
-              Con video?
+              F. Recepción Cliente
             </th>
+
             <th
               scope="col"
-              className="px-6 py-3 text-[12px] font-bold text-right text-gray-500 uppercase "
-            >
-              Dias Restantes
-            </th>
-            <th
-              scope="col"
-              className="px-6 py-3 text-[12px] font-bold text-right text-gray-500 uppercase "
+              className="px-6 py-3 text-[12px] font-bold text-center text-gray-500 uppercase "
             >
               Fecha de Cierre
+            </th>
+            <th
+              scope="col"
+              className="px-6 py-3 text-[12px] font-bold text-center text-gray-500 uppercase "
+            >
+              Tiempo Total Transcurrido
             </th>
           </tr>
         </thead>

@@ -14,15 +14,15 @@ function ListarReclamos() {
         </Link>
         <div className="flex items-center justify-evenly flex-col">
           <div className="flex items-center justify-center mt-2">
-            <span className="text-gray-600 text-2xl">PENDIENTE</span>
+            <span className="text-gray-600 text-2xl">SEGUIMIENTO</span>
             <span className=" w-12 h-7 inline-block bg-yellow-500 ml-4"></span>
           </div>
           <div className="flex items-center justify-center mt-2">
-            <span className="shrink text-gray-600 text-2xl">RECHAZADO</span>
+            <span className="shrink text-gray-600 text-2xl">CERRADO</span>
             <span className="shrink w-12 h-7 inline-block bg-red-500  ml-4"></span>
           </div>
           <div className="flex items-center justify-center mt-2">
-            <span className="text-gray-600 text-2xl">APROBADO</span>
+            <span className="text-gray-600 text-2xl">ATENDIDO</span>
             <span className="w-12 h-7 inline-block bg-green-500  ml-4"></span>
           </div>
         </div>

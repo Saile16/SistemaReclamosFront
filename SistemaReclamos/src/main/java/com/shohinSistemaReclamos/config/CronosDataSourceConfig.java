@@ -29,6 +29,7 @@ public class CronosDataSourceConfig {
 
 
     @Bean
+    @Primary
     public LocalContainerEntityManagerFactoryBean CronosEntityManager() {
         LocalContainerEntityManagerFactoryBean em
                 = new LocalContainerEntityManagerFactoryBean();
@@ -51,6 +52,7 @@ public class CronosDataSourceConfig {
 
 
     @Bean
+    @Primary
     //@ConfigurationProperties(prefix ="spring.datasource")
     public DataSource CronosDataSource() {
 
@@ -67,6 +69,7 @@ public class CronosDataSourceConfig {
     }
 
     @Bean
+    @Primary
     public PlatformTransactionManager CronosTransactionManager() {
 
         JpaTransactionManager transactionManager

@@ -13,16 +13,22 @@ public class Reclamo {
     private String codigo;
     @Column(name = "descripcion")
     private String descripcion;
-    @Column(name="estado_carga")
+    @Column(name="bulto_mal_estado")
     private String estadoCarga;
     @Column(name = "fecha_envio")
     private Date fechaEnvio;
     @Column(name = "fecha_recepcion")
     private Date fechaRecepcion;
-    @Column(name = "fecha_resp_operaciones")
-    private Date fechaRespOperaciones;
+
+    @Column(name = "user_seguridad")
+    private String userSeguridad;
     @Column(name = "fecha_resp_seguridad")
     private Date fechaRespSeguridad;
+
+    @Column(name = "user_operaciones")
+    private String userOperaciones;
+    @Column(name = "fecha_resp_operaciones")
+    private Date fechaRespOperaciones;
     @Column(name="linea_aerea")
     private String lineaAerea;
     private String medio;
@@ -37,40 +43,77 @@ public class Reclamo {
     private String tipoReclamo;
 
     @Column(name = "awb")
-    private String guiMaster;
+    private String guiaMaster;
 
     @Column(name = "hawb")
     private String guiaHija;
 
+    private Character estado;
+
+    @Column(name = "fecha_vuelo")
+    private Date fechaVuelo;
+
+    @Column(name = "fecha_cierre")
+    private Date fechaCierre;
+
+    @Column(name = "importador")
+    private String nombreConsignatario;
+
+    @Column(name = "agente_aduana")
+    private String agenteAduana;
+
+    @Column(name = "agente_carga")
+    private String agenteCarga;
+
+    @Column(name = "fecha_resp_legal")
+    private Date fechaRespLegal;
+
+    @Column(name = "fecha_recepcion_cliente")
+    private Date fechaRecepcionCliente;
+
+    @Column(name = "motivo_reclamo")
+    private String motivoReclamo;
     public Reclamo() {
     }
 
 
-    public Reclamo(String codigo, String observaciones) {
-        this.codigo = codigo;
-        this.observaciones = observaciones;
-    }
-
-    public Reclamo(Long id, String codigo, String descripcion, String estadoCarga, Date fechaEnvio, Date fechaRecepcion, Date fechaRespOperaciones, Date fechaRespSeguridad, String lineaAerea, String medio, String montoReclamo, String numeroVolante, String observaciones, String personaReclamo, String tipoReclamo, String guiMaster, String guiaHija) {
+    public Reclamo(Long id, String codigo, Date fechaEnvio, Date fechaRecepcion, Date fechaRespSeguridad, Date fechaRespOperaciones, String observaciones, Character estado,String numeroVolante,Date fechaRespLegal,Date fechaCierre,Date fechaRecepcionCliente) {
         this.id = id;
         this.codigo = codigo;
-        this.descripcion = descripcion;
-        this.estadoCarga = estadoCarga;
         this.fechaEnvio = fechaEnvio;
         this.fechaRecepcion = fechaRecepcion;
-        this.fechaRespOperaciones = fechaRespOperaciones;
         this.fechaRespSeguridad = fechaRespSeguridad;
-        this.lineaAerea = lineaAerea;
-        this.medio = medio;
-        this.montoReclamo = montoReclamo;
-        this.numeroVolante = numeroVolante;
+        this.fechaRespOperaciones = fechaRespOperaciones;
         this.observaciones = observaciones;
-        this.personaReclamo = personaReclamo;
-        this.tipoReclamo = tipoReclamo;
-        this.guiMaster = guiMaster;
-        this.guiaHija = guiaHija;
+        this.estado = estado;
+        this.numeroVolante=numeroVolante;
+        this.fechaRespLegal=fechaRespLegal;
+        this.fechaCierre=fechaCierre;
+        this.fechaRecepcionCliente=fechaRecepcionCliente;
     }
 
+    /*public Reclamo(Long id, String codigo, String descripcion, String estadoCarga, Date fechaEnvio, Date fechaRecepcion, Date fechaRespOperaciones, Date fechaRespSeguridad, String lineaAerea, String medio, String montoReclamo,
+                       String numeroVolante, String observaciones, String personaReclamo, String tipoReclamo, String guiaMaster, String guiaHija,Character estado) {
+            this.id = id;
+            this.codigo = codigo;
+            this.descripcion = descripcion;
+            this.estadoCarga = estadoCarga;
+            this.fechaEnvio = fechaEnvio;
+            this.fechaRecepcion = fechaRecepcion;
+            this.fechaRespOperaciones = fechaRespOperaciones;
+            this.fechaRespSeguridad = fechaRespSeguridad;
+            this.lineaAerea = lineaAerea;
+            this.medio = medio;
+            this.montoReclamo = montoReclamo;
+            this.numeroVolante = numeroVolante;
+            this.observaciones = observaciones;
+            this.personaReclamo = personaReclamo;
+            this.tipoReclamo = tipoReclamo;
+            this.guiaMaster = guiaMaster;
+            this.guiaHija = guiaHija;
+            this.estado=estado;
+        }
+    */
     public Long getId() {
         return id;
     }
@@ -119,12 +162,12 @@ public class Reclamo {
         this.fechaRecepcion = fechaRecepcion;
     }
 
-    public Date getFechaRespOperaciones() {
-        return fechaRespOperaciones;
+    public String getUserSeguridad() {
+        return userSeguridad;
     }
 
-    public void setFechaRespOperaciones(Date fechaRespOperaciones) {
-        this.fechaRespOperaciones = fechaRespOperaciones;
+    public void setUserSeguridad(String userSeguridad) {
+        this.userSeguridad = userSeguridad;
     }
 
     public Date getFechaRespSeguridad() {
@@ -133,6 +176,22 @@ public class Reclamo {
 
     public void setFechaRespSeguridad(Date fechaRespSeguridad) {
         this.fechaRespSeguridad = fechaRespSeguridad;
+    }
+
+    public String getUserOperaciones() {
+        return userOperaciones;
+    }
+
+    public void setUserOperaciones(String userOperaciones) {
+        this.userOperaciones = userOperaciones;
+    }
+
+    public Date getFechaRespOperaciones() {
+        return fechaRespOperaciones;
+    }
+
+    public void setFechaRespOperaciones(Date fechaRespOperaciones) {
+        this.fechaRespOperaciones = fechaRespOperaciones;
     }
 
     public String getLineaAerea() {
@@ -191,12 +250,12 @@ public class Reclamo {
         this.tipoReclamo = tipoReclamo;
     }
 
-    public String getGuiMaster() {
-        return guiMaster;
+    public String getGuiaMaster() {
+        return guiaMaster;
     }
 
-    public void setGuiMaster(String guiMaster) {
-        this.guiMaster = guiMaster;
+    public void setGuiaMaster(String guiaMaster) {
+        this.guiaMaster = guiaMaster;
     }
 
     public String getGuiaHija() {
@@ -205,5 +264,77 @@ public class Reclamo {
 
     public void setGuiaHija(String guiaHija) {
         this.guiaHija = guiaHija;
+    }
+
+    public Character getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Character estado) {
+        this.estado = estado;
+    }
+
+    public Date getFechaVuelo() {
+        return fechaVuelo;
+    }
+
+    public void setFechaVuelo(Date fechaVuelo) {
+        this.fechaVuelo = fechaVuelo;
+    }
+
+    public Date getFechaCierre() {
+        return fechaCierre;
+    }
+
+    public void setFechaCierre(Date fechaCierre) {
+        this.fechaCierre = fechaCierre;
+    }
+
+    public String getNombreConsignatario() {
+        return nombreConsignatario;
+    }
+
+    public void setNombreConsignatario(String nombreConsignatario) {
+        this.nombreConsignatario = nombreConsignatario;
+    }
+
+    public String getAgenteAduana() {
+        return agenteAduana;
+    }
+
+    public void setAgenteAduana(String agenteAduana) {
+        this.agenteAduana = agenteAduana;
+    }
+
+    public String getAgenteCarga() {
+        return agenteCarga;
+    }
+
+    public void setAgenteCarga(String agenteCarga) {
+        this.agenteCarga = agenteCarga;
+    }
+
+    public Date getFechaRespLegal() {
+        return fechaRespLegal;
+    }
+
+    public void setFechaRespLegal(Date fechaRespLegal) {
+        this.fechaRespLegal = fechaRespLegal;
+    }
+
+    public Date getFechaRecepcionCliente() {
+        return fechaRecepcionCliente;
+    }
+
+    public void setFechaRecepcionCliente(Date fechaRecepcionCliente) {
+        this.fechaRecepcionCliente = fechaRecepcionCliente;
+    }
+
+    public String getMotivoReclamo() {
+        return motivoReclamo;
+    }
+
+    public void setMotivoReclamo(String motivoReclamo) {
+        this.motivoReclamo = motivoReclamo;
     }
 }
