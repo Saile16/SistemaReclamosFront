@@ -16,6 +16,7 @@ const FilaTablaReclamo = ({ reclamo }) => {
   } = useReclamos();
   const [observaciones, setObservaciones] = useState("");
   const [showModal, setShowModal] = useState(false);
+
   // console.log(reclamo);
   const handleOpenModal = () => {
     setShowModal(true);

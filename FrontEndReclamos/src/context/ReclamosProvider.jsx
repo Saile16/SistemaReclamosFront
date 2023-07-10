@@ -5,6 +5,7 @@ const ReclamosContext = createContext();
 
 const ReclamosProvider = ({ children }) => {
   const [reclamos, setReclamos] = useState([]);
+  const [reclamosFiltrados, setReclamosFiltrados] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState({
     error: false,
@@ -22,11 +23,6 @@ const ReclamosProvider = ({ children }) => {
           numeroVolante: formData.numeroVolante,
         }
       );
-      // console.log({
-      //   almacen: formData.almacen,
-      //   numeroVolante: formData.numeroVolante,
-      // });
-      // console.log(response.data[0]);
       const {
         numeroVolante,
         lineaAerea,
@@ -167,7 +163,6 @@ const ReclamosProvider = ({ children }) => {
       console.error("Error:", error);
     }
   };
-
   const handleRecepcionCliente = async (numeroVolante) => {
     try {
       const response = await axios.put("http://localhost:8080/api/actualizar", {
@@ -179,7 +174,6 @@ const ReclamosProvider = ({ children }) => {
       console.error("Error:", error);
     }
   };
-
   const handleCerrarReclamo = async (numeroVolante) => {
     try {
       const response = await axios.put("http://localhost:8080/api/actualizar", {
@@ -193,6 +187,24 @@ const ReclamosProvider = ({ children }) => {
     }
   };
 
+  const handleFiltarPorFecha = async (fechaInicio, fechaFin) => {
+    console.log(fechaInicio, fechaFin);
+    setLoading(true);
+    let reclamosActualizado;
+    try {
+      const response = await axios.post("http://localhost:8080/api/buscar", {
+        fechaInicio,
+        fechaFin,
+      });
+      console.log(response);
+
+      setReclamos(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+    // listarReclamos();
+  };
   return (
     <ReclamosContext.Provider
       value={{
@@ -205,7 +217,9 @@ const ReclamosProvider = ({ children }) => {
         handleKeyDown,
         handleCerrarReclamo,
         handleRecepcionCliente,
+        handleFiltarPorFecha,
         reclamos,
+        reclamosFiltrados,
         loading,
         error,
         respondido,

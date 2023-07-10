@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 
 import java.util.Date;
 
-@Entity
 @Table(name = "reclamo")
 public class Reclamo {
     @Id
@@ -73,11 +72,42 @@ public class Reclamo {
 
     @Column(name = "motivo_reclamo")
     private String motivoReclamo;
+
+    private String cliente;
+
+    private boolean asistio;
+    @Column(name = "fecha_cita_cliente1")
+    private Date fechaCitaCliente1;
+
+    @Column(name = "fecha_cita_cliente2")
+    private Date fechaCitaCliente2;
+    //filtro FechasRECLAMOS
+    private Date fechaInicio;
+    private Date fechaFin;
+
+    private String almacen;
+    @Column(name = "bulto_mal_estado")
+    private Integer bultoMalEstado;
+
+    @Column(name = "bulto_recibido")
+    private Integer bultoRecibido;
+    @Column(name = "tipo_carga")
+    private String tipoCarga;
+
+    @Column(name = "numero_vuelo")
+    private String numeroVuelo;
+
+    @Column(name = "tipo_ingreso")
+    private Character tipoIngreso;
+
+    private String procede;
     public Reclamo() {
     }
 
 
-    public Reclamo(Long id, String codigo, Date fechaEnvio, Date fechaRecepcion, Date fechaRespSeguridad, Date fechaRespOperaciones, String observaciones, Character estado,String numeroVolante,Date fechaRespLegal,Date fechaCierre,Date fechaRecepcionCliente) {
+    public Reclamo(Long id, String codigo, Date fechaEnvio, Date fechaRecepcion, Date fechaRespSeguridad, Date fechaRespOperaciones, String observaciones, Character estado,String numeroVolante,
+                   Date fechaRespLegal,Date fechaCierre,Date fechaRecepcionCliente,String cliente,Boolean asistio,Date fechaCitaCliente1,Date fechaCitaCliente2,String guiaMaster,String guiaHija,
+                   String almacen,String motivoReclamo,Integer bultoMalEstado,String tipoCarga,Integer bultoRecibido,String numeroVuelo,Character tipoIngreso,Date fechaVuelo,String procede) {
         this.id = id;
         this.codigo = codigo;
         this.fechaEnvio = fechaEnvio;
@@ -90,6 +120,22 @@ public class Reclamo {
         this.fechaRespLegal=fechaRespLegal;
         this.fechaCierre=fechaCierre;
         this.fechaRecepcionCliente=fechaRecepcionCliente;
+        this.cliente=cliente;
+        this.asistio=asistio;
+        this.fechaCitaCliente1=fechaCitaCliente1;
+        this.fechaCitaCliente2=fechaCitaCliente2;
+        this.guiaMaster=guiaMaster;
+        this.guiaHija=guiaHija;
+        this.almacen=almacen;
+        this.motivoReclamo=motivoReclamo;
+        this.bultoMalEstado=bultoMalEstado;
+        this.tipoCarga=tipoCarga;
+        this.bultoRecibido=bultoRecibido;
+        this.numeroVuelo=numeroVuelo;
+        this.tipoIngreso=tipoIngreso;
+        this.fechaVuelo=fechaVuelo;
+        this.procede=procede;
+
     }
 
     /*public Reclamo(Long id, String codigo, String descripcion, String estadoCarga, Date fechaEnvio, Date fechaRecepcion, Date fechaRespOperaciones, Date fechaRespSeguridad, String lineaAerea, String medio, String montoReclamo,
@@ -336,5 +382,111 @@ public class Reclamo {
 
     public void setMotivoReclamo(String motivoReclamo) {
         this.motivoReclamo = motivoReclamo;
+    }
+
+    public String getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(String cliente) {
+        this.cliente = cliente;
+    }
+
+    public boolean isAsistio() {
+        return asistio;
+    }
+
+    public void setAsistio(boolean asistio) {
+        this.asistio = asistio;
+    }
+
+    public Date getFechaCitaCliente1() {
+        return fechaCitaCliente1;
+    }
+
+    public void setFechaCitaCliente1(Date fechaCitaCliente1) {
+        this.fechaCitaCliente1 = fechaCitaCliente1;
+    }
+
+    public Date getFechaCitaCliente2() {
+        return fechaCitaCliente2;
+    }
+
+    public void setFechaCitaCliente2(Date fechaCitaCliente2) {
+        this.fechaCitaCliente2 = fechaCitaCliente2;
+    }
+
+    public Date getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(Date fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public Date getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setFechaFin(Date fechaFin) {
+        this.fechaFin = fechaFin;
+    }
+
+
+    public String getAlmacen() {
+        return almacen;
+    }
+
+    public void setAlmacen(String almacen) {
+        this.almacen = almacen;
+    }
+
+
+    public String getTipoCarga() {
+        return tipoCarga;
+    }
+
+    public void setTipoCarga(String tipoCarga) {
+        this.tipoCarga = tipoCarga;
+    }
+
+    public Integer getBultoMalEstado() {
+        return bultoMalEstado;
+    }
+
+    public void setBultoMalEstado(Integer bultoMalEstado) {
+        this.bultoMalEstado = bultoMalEstado;
+    }
+
+    public Integer getBultoRecibido() {
+        return bultoRecibido;
+    }
+
+    public void setBultoRecibido(Integer bultoRecibido) {
+        this.bultoRecibido = bultoRecibido;
+    }
+
+    public String getNumeroVuelo() {
+        return numeroVuelo;
+    }
+
+    public void setNumeroVuelo(String numeroVuelo) {
+        this.numeroVuelo = numeroVuelo;
+    }
+
+    public Character getTipoIngreso() {
+        return tipoIngreso;
+    }
+
+    public void setTipoIngreso(Character tipoIngreso) {
+        this.tipoIngreso = tipoIngreso;
+    }
+
+    public String getProcede() {
+        return procede;
+    }
+
+    public void setProcede(String procede) {
+        this.procede = procede;
     }
 }

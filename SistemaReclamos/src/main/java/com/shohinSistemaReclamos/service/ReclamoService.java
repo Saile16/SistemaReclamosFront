@@ -48,9 +48,26 @@ public class ReclamoService {
         List<?> lista=reclamoRepository.actualizar(reclamo);
         return lista;
     }
-    public void generarCodigo(){
 
+
+    @Transactional
+    public List<?> filtarPorFecha(Reclamo reclamo){
+        List<?> lista= reclamoRepository.filtarPorFecha(reclamo);
+        return lista;
     }
 
+
+    @Transactional
+    public List<?> filtrarPorEstado(Reclamo reclamo){
+        System.out.println("que es esto : " + reclamo.getEstado());
+        List<?> lista= reclamoRepository.filtrarPorEstado(reclamo);
+        return lista;
+    }
+
+    @Transactional
+    public List<?> detalleReclamo(Reclamo reclamo){
+        List<?> lista= reclamoRepository.detalleReclamo(reclamo);
+        return lista;
+    }
 
 }

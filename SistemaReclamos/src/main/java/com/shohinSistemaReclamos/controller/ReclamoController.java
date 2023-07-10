@@ -1,11 +1,7 @@
 package com.shohinSistemaReclamos.controller;
-
 import com.shohinSistemaReclamos.entity.primary.Reclamo;
-import com.shohinSistemaReclamos.entity.second.Volante;
 import com.shohinSistemaReclamos.service.ReclamoService;
-import com.shohinSistemaReclamos.service.VolanteService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +25,7 @@ public class ReclamoController {
             ){
         Map<String,Object> response = new HashMap<>();
         System.out.println("reclamos + "+ reclamo.getEstado());
+        System.out.println("llama a estooo ?? mal estado bulto " +reclamo.getBultoMalEstado());
         try{
             System.out.println("llama a esto reclamos controller /reclamos?? " + reclamo.getNumeroVolante());
             List<?> reclamos=reclamoService.grabar(reclamo);
@@ -69,11 +66,66 @@ public class ReclamoController {
 
     @PutMapping("/actualizar")
     public ResponseEntity<?> actualizar(@RequestBody Reclamo reclamo){
+        System.out.println(reclamo.getFechaCitaCliente1()+"LLAMAO A ESTO ????????????????????");
         Map<String,Object> response = new HashMap<>();
         try{
             List<?> listaReclamo=reclamoService.actualizar(reclamo);
             if(listaReclamo.isEmpty()){
                 response.put("Mensaje","No existen datos");
+                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(listaReclamo,HttpStatus.OK);
+        }
+        catch (DataAccessException e){
+            response.put("Mensaje","Error al consultar los datos");
+            response.put("Error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
+        }
+    }
+
+    @PostMapping("/buscar")
+    public ResponseEntity<?> filtarPorFecha(@RequestBody Reclamo reclamo){
+        Map<String,Object> response = new HashMap<>();
+        try{
+            List<?> listaReclamo=reclamoService.filtarPorFecha(reclamo);
+            if(listaReclamo.isEmpty()){
+                response.put("Mensaje","No existen reclamos en esas fechas");
+                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(listaReclamo,HttpStatus.OK);
+        }
+        catch (DataAccessException e){
+            response.put("Mensaje","No existen reclamos en esas fechas");
+            response.put("Error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
+        }
+    }
+
+    @PostMapping("/estado")
+    public ResponseEntity<?> filtrarPorEstado(@RequestBody Reclamo reclamo){
+        Map<String,Object> response = new HashMap<>();
+        try{
+            List<?> listaReclamo=reclamoService.filtrarPorEstado(reclamo);
+            if(listaReclamo.isEmpty()){
+                response.put("Mensaje","No existen reclamos");
+                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(listaReclamo,HttpStatus.OK);
+        }
+        catch (DataAccessException e){
+            response.put("Mensaje","No hay reclamos con ese estado");
+            response.put("Error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
+        }
+    }
+
+    @PostMapping("/detalle-reclamo")
+    public ResponseEntity<?> detalleReclamo(@RequestBody Reclamo reclamo){
+        Map<String,Object> response = new HashMap<>();
+        try{
+            List<?> listaReclamo=reclamoService.detalleReclamo(reclamo);
+            if(listaReclamo.isEmpty()){
+                response.put("Mensaje","No existen reclamos en esas fechas");
                 return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
             }
             return new ResponseEntity<>(listaReclamo,HttpStatus.OK);
