@@ -1,10 +1,10 @@
-import { Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 const Error404 = () => {
   const navigate = useNavigate();
   setTimeout(() => {
     navigate("/reclamos");
-  }, 1200);
+  }, 3800);
   return (
     <div class="w-full h-screen flex flex-col items-center justify-center">
       <svg
@@ -161,10 +161,10 @@ const Error404 = () => {
       </svg>
       <div class="flex flex-col items-center justify-center">
         <p class="text-3xl md:text-4xl lg:text-5xl text-gray-800 mt-12">
-          Page Not Found
+          Página no Encontrada
         </p>
         <p class="md:text-lg lg:text-xl text-gray-600 mt-8">
-          Sorry, the page you are looking for could not be found.
+          Lo sentimos, la página que está buscando no existe.
         </p>
         <a
           href="#"
@@ -183,7 +183,7 @@ const Error404 = () => {
               clip-rule="evenodd"
             ></path>
           </svg>
-          <span>Return Home</span>
+          <Link to="/ingreso-reclamo">Volver al Inicio</Link>
         </a>
       </div>
     </div>

@@ -1,5 +1,4 @@
 export const calculoDiasRestantes = (fechaClienteRecepcion) => {
-  // console.log(fechaClienteRecepcion, "hajsdhjasdjas fecha ");
   const fechaActual = new Date();
   const fechaCierreObj = new Date(fechaClienteRecepcion);
 
@@ -13,8 +12,6 @@ export const calculoDiasRestantes = (fechaClienteRecepcion) => {
   if (diasRestantes <= 0) {
     return 0;
   }
-  // console.log(typeof diasRestantes);
-  // console.log(diasRestantes);
 
   return diasRestantes + "dias";
 };

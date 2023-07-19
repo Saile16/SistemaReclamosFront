@@ -13,24 +13,19 @@ public class ReclamoService {
 
     @Autowired
     ReclamoRepository reclamoRepository;
+
+    @Transactional
+    public String obtenerCodigo(Reclamo reclamo){
+        System.out.println(reclamo.getTipoReclamo()+" Imprime el tipo de reclamo???'");
+       String codigo=reclamoRepository.obtenerCodigo(reclamo);
+        return codigo;
+    }
     @Transactional
     public List<?> grabar(Reclamo reclamo){
         System.out.println("llama a esto grabar reclamos en service reclamos" + reclamo.getNumeroVolante());
-
-        List<?> lista=reclamoRepository.listar();
-        Long contador;
-        String tipoReclamo = reclamo.getTipoReclamo();
-        String secuencia;
-        if(lista.isEmpty()){
-            String ultimoReclamo = reclamo.getNumeroVolante();
-            contador = 1L;
-            secuencia = String.format("TRA-%s-%05d", ultimoReclamo, contador);
-            reclamo.setCodigo(secuencia);
-        }
-        contador = (long) lista.size();
-        System.out.println("numero contador : " + contador);
-        secuencia = String.format("TRA-%s-%05d", reclamo.getNumeroVolante(), contador+1);
-        reclamo.setCodigo(secuencia);
+        String codigo= obtenerCodigo(reclamo);
+        System.out.println("que tipo es " + codigo);
+        reclamo.setCodigo(codigo);
         List<?> datos=reclamoRepository.grabar(reclamo);
         return datos;
     }
@@ -46,21 +41,6 @@ public class ReclamoService {
     public List<?> actualizar(Reclamo reclamo){
         System.out.println("tlegal???? : " + reclamo.getFechaRecepcionCliente());
         List<?> lista=reclamoRepository.actualizar(reclamo);
-        return lista;
-    }
-
-
-    @Transactional
-    public List<?> filtarPorFecha(Reclamo reclamo){
-        List<?> lista= reclamoRepository.filtarPorFecha(reclamo);
-        return lista;
-    }
-
-
-    @Transactional
-    public List<?> filtrarPorEstado(Reclamo reclamo){
-        System.out.println("que es esto : " + reclamo.getEstado());
-        List<?> lista= reclamoRepository.filtrarPorEstado(reclamo);
         return lista;
     }
 

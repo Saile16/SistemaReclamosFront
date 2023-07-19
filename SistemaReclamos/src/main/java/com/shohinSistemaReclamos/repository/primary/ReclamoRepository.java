@@ -53,11 +53,23 @@ public class ReclamoRepository {
 
     }
 
+    public String obtenerCodigo(Reclamo reclamo){
+        String sql=(
+                "select trim(to_char(current_date,'YYYY') ||trim( to_char(coalesce(max(to_number(trim(substring(codigo,5)),'9999')),0)+1,'0000'))) as numero from reclamo\n" +
+                        "                    where trim(substring(codigo,1,4))=to_char(current_date,'YYYY') and tipo_reclamo='"+reclamo.getTipoReclamo()+"'"
+                );
+        Query query = em.createNativeQuery(sql );
+        String lista = query.getSingleResult().toString();
+        System.out.println("cual es el sql " + sql );
+        em.close();
+        return lista;
+    }
+
     public List<?> listar(){
         String sql = (
                 "select id, codigo, fecha_envio, fecha_recepcion, fecha_resp_seguridad, fecha_resp_operaciones, observaciones, estado,numero_volante,fecha_resp_legal,fecha_cierre," +
                         "fecha_recepcion_cliente,cliente,asistio,fecha_cita_cliente1,fecha_cita_cliente2,awb,hawb,almacen,motivo_reclamo,bulto_mal_estado,tipo_carga,bulto_recibido, " +
-                        "numero_vuelo,tipo_ingreso,fecha_vuelo,procede from reclamo "
+                        "numero_vuelo,tipo_ingreso,fecha_vuelo,procede,tipo_reclamo from reclamo "
         );
         String orderBy = "";
         orderBy += " order by id";
@@ -73,7 +85,7 @@ public class ReclamoRepository {
                         //(Long) t[0],(String) t[1]
                         (Long) t[0], (String) t[1], (Date) t[2], (Date) t[3], (Date) t[4], (Date) t[5], (String) t[6], (Character) t[7],(String) t[8],(Date) t[9],(Date) t[10],
                         (Date) t[11],(String) t[12],(Boolean) t[13],(Date) t[14],(Date) t[15],(String) t[16],(String)t[17],(String)t[18],(String) t[19],(Integer)t[20],(String)t[21],
-                        (Integer) t[22],(String) t[23],(Character) t[24],(Date) t[25],(String) t[26]
+                        (Integer) t[22],(String) t[23],(Character) t[24],(Date) t[25],(String) t[26],(String)t[27]
                 ))
                 .collect(Collectors.toList());
     }
@@ -83,6 +95,7 @@ public class ReclamoRepository {
                 "UPDATE reclamo "
         );
         String set="";
+
         if(reclamo.getObservaciones()!=null){
             set+= "SET observaciones = '"+reclamo.getObservaciones()+"', fecha_resp_operaciones = ' "+reclamo.getFechaRespOperaciones()+"', cliente = ' "
             +reclamo.getCliente()+"', fecha_cita_cliente1 = '" + reclamo.getFechaCitaCliente1() + "', asistio = 'false'" ;
@@ -113,64 +126,19 @@ public class ReclamoRepository {
         if(reclamo.getFechaCitaCliente2()!=null){
             set+="SET fecha_cita_cliente2='"+reclamo.getFechaCitaCliente2()+"' ";
         }
-
-        String where = "where numero_volante='" + reclamo.getNumeroVolante()+"'";
+        String where="";
+        if(reclamo.getNumeroVolante()==null){
+            where+="where awb='"+reclamo.getGuiaMaster()+"'";
+        }else{
+            where+="where numero_volante='"+reclamo.getNumeroVolante()+"'";
+        }
         Query query = em.createNativeQuery(sql + set+ where);
         int filas = query.executeUpdate();
         em.close();
         return Collections.singletonList(filas);
     }
 
-    public List<?> filtarPorFecha(Reclamo reclamo){
-        String sql = (
-                "select id, codigo, fecha_envio, fecha_recepcion, fecha_resp_seguridad, fecha_resp_operaciones, observaciones, estado,numero_volante,fecha_resp_legal," +
-                        "fecha_cierre,fecha_recepcion_cliente,cliente,asistio,fecha_cita_cliente1,fecha_cita_cliente2,awb,hawb,almacen,motivo_reclamo,bulto_mal_estado," +
-                        "tipo_carga,bulto_recibido,numero_vuelo,tipo_ingreso,fecha_vuelo,procede from reclamo  "
-        );
-        String where ="";
-        where="where fecha_recepcion BETWEEN '" + reclamo.getFechaInicio()+"' and '" + reclamo.getFechaFin()+"'";
-        String orderBy = "";
-        orderBy += " order by id";
-        Query query = em.createNativeQuery(sql +where+ orderBy);
-        List<Object[]> lista = query.getResultList();
-        System.out.println("cual es el sql " + sql +where  +orderBy);
-        em.close();
-        return lista.stream()
-                .map(t -> new Reclamo(
-                        //(Long) t[0], (String) t[1], (String) t[2], (String) t[3], (Date) t[4], (Date) t[5], (Date) t[6], (Date) t[7], (String) t[8], (String) t[9], (String) t[10], (String) t[11], (String) t[12],
-                        //(String) t[13], (String) t[14], (String) t[15], (String) t[16],(Character) t[17]
-                        //(Long) t[0],(String) t[1]
-                        (Long) t[0], (String) t[1], (Date) t[2], (Date) t[3], (Date) t[4], (Date) t[5], (String) t[6], (Character) t[7],(String) t[8],(Date) t[9],(Date) t[10],
-                        (Date) t[11],(String) t[12],(Boolean) t[13],(Date) t[14],(Date) t[15],(String) t[16],(String)t[17],(String) t[18],(String) t[19],(Integer)t[20],
-                        (String)t[21],(Integer) t[22],(String) t[23],(Character) t[24],(Date) t[25],(String) t[26]
-                ))
-                .collect(Collectors.toList());
-    }
-    public List<?> filtrarPorEstado(Reclamo reclamo){
-        String sql = (
-                "select id, codigo, fecha_envio, fecha_recepcion, fecha_resp_seguridad, fecha_resp_operaciones, observaciones, estado,numero_volante,fecha_resp_legal," +
-                        "fecha_cierre,fecha_recepcion_cliente,cliente,asistio,fecha_cita_cliente1,fecha_cita_cliente2,awb,hawb,almacen,motivo_reclamo," +
-                        "bulto_mal_estado,tipo_carga,bulto_recibido,numero_vuelo,tipo_ingreso,fecha_vuelo,procede from reclamo "
-        );
-        String where ="";
-        where="where estado = '" + reclamo.getEstado()+"'";
-        String orderBy = "";
-        orderBy += " order by id";
-        Query query = em.createNativeQuery(sql +where+ orderBy);
-        List<Object[]> lista = query.getResultList();
-        System.out.println("cual es el sql " + sql +where  +orderBy);
-        em.close();
-        return lista.stream()
-                .map(t -> new Reclamo(
-                        //(Long) t[0], (String) t[1], (String) t[2], (String) t[3], (Date) t[4], (Date) t[5], (Date) t[6], (Date) t[7], (String) t[8], (String) t[9], (String) t[10], (String) t[11], (String) t[12],
-                        //(String) t[13], (String) t[14], (String) t[15], (String) t[16],(Character) t[17]
-                        //(Long) t[0],(String) t[1]
-                        (Long) t[0], (String) t[1], (Date) t[2], (Date) t[3], (Date) t[4], (Date) t[5], (String) t[6], (Character) t[7],(String) t[8],(Date) t[9],(Date) t[10],
-                        (Date) t[11],(String) t[12],(Boolean) t[13],(Date) t[14],(Date) t[15],(String) t[16],(String)t[17],(String) t[18],(String) t[19],(Integer)t[20],(String) t[21],
-                        (Integer) t[22],(String) t[23],(Character) t[24],(Date) t[25],(String) t[26]
-                ))
-                .collect(Collectors.toList());
-    }
+
 
     public List<?> detalleReclamo(Reclamo reclamo){
         String sql = (
@@ -191,7 +159,7 @@ public class ReclamoRepository {
                         //(Long) t[0],(String) t[1]
                         (Long) t[0], (String) t[1], (Date) t[2], (Date) t[3], (Date) t[4], (Date) t[5], (String) t[6], (Character) t[7],(String) t[8],(Date) t[9],(Date) t[10],
                         (Date) t[11],(String) t[12],(Boolean) t[13],(Date) t[14],(Date) t[15],(String) t[16],(String)t[17],(String) t[18],(String)t[19],(Integer) t[20],(String) t[21],
-                        (Integer) t[22],(String) t[23],(Character) t[24],(Date) t[25],(String) t[26]
+                        (Integer) t[22],(String) t[23],(Character) t[24],(Date) t[25],(String) t[26],(String) t[27]
                 ))
                 .collect(Collectors.toList());
     }

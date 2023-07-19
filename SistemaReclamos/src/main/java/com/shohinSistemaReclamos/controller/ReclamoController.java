@@ -50,7 +50,7 @@ public class ReclamoController {
         try{
             List<?> listaReclamo=reclamoService.listar();
             if(listaReclamo.isEmpty()){
-                response.put("Mensaje","No existen datos en esa fecha");
+                response.put("Mensaje","No existen reclamos");
                 return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
             }
 
@@ -71,49 +71,13 @@ public class ReclamoController {
         try{
             List<?> listaReclamo=reclamoService.actualizar(reclamo);
             if(listaReclamo.isEmpty()){
-                response.put("Mensaje","No existen datos");
+                response.put("mensaje","El reclamo no existe");
                 return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
             }
             return new ResponseEntity<>(listaReclamo,HttpStatus.OK);
         }
         catch (DataAccessException e){
-            response.put("Mensaje","Error al consultar los datos");
-            response.put("Error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-            return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
-        }
-    }
-
-    @PostMapping("/buscar")
-    public ResponseEntity<?> filtarPorFecha(@RequestBody Reclamo reclamo){
-        Map<String,Object> response = new HashMap<>();
-        try{
-            List<?> listaReclamo=reclamoService.filtarPorFecha(reclamo);
-            if(listaReclamo.isEmpty()){
-                response.put("Mensaje","No existen reclamos en esas fechas");
-                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-            }
-            return new ResponseEntity<>(listaReclamo,HttpStatus.OK);
-        }
-        catch (DataAccessException e){
-            response.put("Mensaje","No existen reclamos en esas fechas");
-            response.put("Error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-            return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
-        }
-    }
-
-    @PostMapping("/estado")
-    public ResponseEntity<?> filtrarPorEstado(@RequestBody Reclamo reclamo){
-        Map<String,Object> response = new HashMap<>();
-        try{
-            List<?> listaReclamo=reclamoService.filtrarPorEstado(reclamo);
-            if(listaReclamo.isEmpty()){
-                response.put("Mensaje","No existen reclamos");
-                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-            }
-            return new ResponseEntity<>(listaReclamo,HttpStatus.OK);
-        }
-        catch (DataAccessException e){
-            response.put("Mensaje","No hay reclamos con ese estado");
+            response.put("mensaje","Hubo un error al actualizar");
             response.put("Error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
             return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
         }

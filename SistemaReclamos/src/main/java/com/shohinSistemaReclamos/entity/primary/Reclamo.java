@@ -107,7 +107,7 @@ public class Reclamo {
 
     public Reclamo(Long id, String codigo, Date fechaEnvio, Date fechaRecepcion, Date fechaRespSeguridad, Date fechaRespOperaciones, String observaciones, Character estado,String numeroVolante,
                    Date fechaRespLegal,Date fechaCierre,Date fechaRecepcionCliente,String cliente,Boolean asistio,Date fechaCitaCliente1,Date fechaCitaCliente2,String guiaMaster,String guiaHija,
-                   String almacen,String motivoReclamo,Integer bultoMalEstado,String tipoCarga,Integer bultoRecibido,String numeroVuelo,Character tipoIngreso,Date fechaVuelo,String procede) {
+                   String almacen,String motivoReclamo,Integer bultoMalEstado,String tipoCarga,Integer bultoRecibido,String numeroVuelo,Character tipoIngreso,Date fechaVuelo,String procede,String tipoReclamo) {
         this.id = id;
         this.codigo = codigo;
         this.fechaEnvio = fechaEnvio;
@@ -135,31 +135,10 @@ public class Reclamo {
         this.tipoIngreso=tipoIngreso;
         this.fechaVuelo=fechaVuelo;
         this.procede=procede;
+        this.tipoReclamo=tipoReclamo;
 
     }
 
-    /*public Reclamo(Long id, String codigo, String descripcion, String estadoCarga, Date fechaEnvio, Date fechaRecepcion, Date fechaRespOperaciones, Date fechaRespSeguridad, String lineaAerea, String medio, String montoReclamo,
-                       String numeroVolante, String observaciones, String personaReclamo, String tipoReclamo, String guiaMaster, String guiaHija,Character estado) {
-            this.id = id;
-            this.codigo = codigo;
-            this.descripcion = descripcion;
-            this.estadoCarga = estadoCarga;
-            this.fechaEnvio = fechaEnvio;
-            this.fechaRecepcion = fechaRecepcion;
-            this.fechaRespOperaciones = fechaRespOperaciones;
-            this.fechaRespSeguridad = fechaRespSeguridad;
-            this.lineaAerea = lineaAerea;
-            this.medio = medio;
-            this.montoReclamo = montoReclamo;
-            this.numeroVolante = numeroVolante;
-            this.observaciones = observaciones;
-            this.personaReclamo = personaReclamo;
-            this.tipoReclamo = tipoReclamo;
-            this.guiaMaster = guiaMaster;
-            this.guiaHija = guiaHija;
-            this.estado=estado;
-        }
-    */
     public Long getId() {
         return id;
     }
